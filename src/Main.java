@@ -1,17 +1,44 @@
 // Press Shift twice to open the Search Everywhere dialog and type `show whitespaces`,
 // then press Enter. You can now see whitespace characters in your code.
+import org.antlr.v4.runtime.*;
+import org.antlr.v4.runtime.tree.*;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         // Press Alt+Intro with your caret at the highlighted text to see how
         // IntelliJ IDEA suggests fixing it.
-        System.out.printf("Hello and welcome!");
+        /**********************************************************************************
+        String fileName = "../yourfile.in"; // Replace with the path to your .in file
+        BufferedReader reader = new BufferedReader(new FileReader(fileName));
+        String line;
+        while ((line = reader.readLine()) != null) {
+            System.out.println(line); // For example, print each line
+        }
+        reader.close(); // Close the file when you're done
+        //**********************************************************************************/
+        LPP_grammarLexer lexer;
+        if (args.length>0)
+            lexer = new LPP_grammarLexer(CharStreams.fromFileName(args[0]));
+        else
+            
+            lexer = new LPP_grammarLexer(CharStreams.fromStream(System.in));
+        // create a buffer of tokens pulled from the lexer
+                CommonTokenStream tokens = new CommonTokenStream(lexer);
+        // create a parser that feeds off the tokens buffer
+                LPP_grammarParser parser = new LPP_grammarParser(tokens);
+                ParseTree tree = parser.programa(); // begin parsing at init rule
+         
+        // Create a generic parse tree walker that can trigger callbacks
+         ParseTreeWalker walker = new ParseTreeWalker();
+         // Walk the tree created during the parse, trigger callbacks
+        walker.walk(new Translator(), tree);
+        //System.out.println("Holli"); // print a \n after translation
 
-        // Press Mayús+F10 or click the green arrow button in the gutter to run the code.
-        for (int i = 1; i <= 5; i++) {
 
-            // Press Mayús+F9 to start debugging your code. We have set one breakpoint
-            // for you, but you can always add more by pressing Ctrl+F8.
-            System.out.println("i = " + i);
         }
     }
-}
