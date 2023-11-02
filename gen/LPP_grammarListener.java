@@ -17,65 +17,55 @@ public interface LPP_grammarListener extends ParseTreeListener {
 	 */
 	void exitPrograma(LPP_grammarParser.ProgramaContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link LPP_grammarParser#declaracionesTipos}.
+	 * Enter a parse tree produced by {@link LPP_grammarParser#registro}.
 	 * @param ctx the parse tree
 	 */
-	void enterDeclaracionesTipos(LPP_grammarParser.DeclaracionesTiposContext ctx);
+	void enterRegistro(LPP_grammarParser.RegistroContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link LPP_grammarParser#declaracionesTipos}.
+	 * Exit a parse tree produced by {@link LPP_grammarParser#registro}.
 	 * @param ctx the parse tree
 	 */
-	void exitDeclaracionesTipos(LPP_grammarParser.DeclaracionesTiposContext ctx);
+	void exitRegistro(LPP_grammarParser.RegistroContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link LPP_grammarParser#declaracionRegistro}.
+	 * Enter a parse tree produced by {@link LPP_grammarParser#rutina}.
 	 * @param ctx the parse tree
 	 */
-	void enterDeclaracionRegistro(LPP_grammarParser.DeclaracionRegistroContext ctx);
+	void enterRutina(LPP_grammarParser.RutinaContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link LPP_grammarParser#declaracionRegistro}.
+	 * Exit a parse tree produced by {@link LPP_grammarParser#rutina}.
 	 * @param ctx the parse tree
 	 */
-	void exitDeclaracionRegistro(LPP_grammarParser.DeclaracionRegistroContext ctx);
+	void exitRutina(LPP_grammarParser.RutinaContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link LPP_grammarParser#declaracionTipo}.
+	 * Enter a parse tree produced by {@link LPP_grammarParser#procedimiento}.
 	 * @param ctx the parse tree
 	 */
-	void enterDeclaracionTipo(LPP_grammarParser.DeclaracionTipoContext ctx);
+	void enterProcedimiento(LPP_grammarParser.ProcedimientoContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link LPP_grammarParser#declaracionTipo}.
+	 * Exit a parse tree produced by {@link LPP_grammarParser#procedimiento}.
 	 * @param ctx the parse tree
 	 */
-	void exitDeclaracionTipo(LPP_grammarParser.DeclaracionTipoContext ctx);
+	void exitProcedimiento(LPP_grammarParser.ProcedimientoContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link LPP_grammarParser#declaracionesSubprogramas}.
+	 * Enter a parse tree produced by {@link LPP_grammarParser#funcion}.
 	 * @param ctx the parse tree
 	 */
-	void enterDeclaracionesSubprogramas(LPP_grammarParser.DeclaracionesSubprogramasContext ctx);
+	void enterFuncion(LPP_grammarParser.FuncionContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link LPP_grammarParser#declaracionesSubprogramas}.
+	 * Exit a parse tree produced by {@link LPP_grammarParser#funcion}.
 	 * @param ctx the parse tree
 	 */
-	void exitDeclaracionesSubprogramas(LPP_grammarParser.DeclaracionesSubprogramasContext ctx);
+	void exitFuncion(LPP_grammarParser.FuncionContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link LPP_grammarParser#declaracionProcedimiento}.
+	 * Enter a parse tree produced by {@link LPP_grammarParser#retorne}.
 	 * @param ctx the parse tree
 	 */
-	void enterDeclaracionProcedimiento(LPP_grammarParser.DeclaracionProcedimientoContext ctx);
+	void enterRetorne(LPP_grammarParser.RetorneContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link LPP_grammarParser#declaracionProcedimiento}.
+	 * Exit a parse tree produced by {@link LPP_grammarParser#retorne}.
 	 * @param ctx the parse tree
 	 */
-	void exitDeclaracionProcedimiento(LPP_grammarParser.DeclaracionProcedimientoContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link LPP_grammarParser#declaracionFuncion}.
-	 * @param ctx the parse tree
-	 */
-	void enterDeclaracionFuncion(LPP_grammarParser.DeclaracionFuncionContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link LPP_grammarParser#declaracionFuncion}.
-	 * @param ctx the parse tree
-	 */
-	void exitDeclaracionFuncion(LPP_grammarParser.DeclaracionFuncionContext ctx);
+	void exitRetorne(LPP_grammarParser.RetorneContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link LPP_grammarParser#parametros}.
 	 * @param ctx the parse tree
@@ -97,35 +87,25 @@ public interface LPP_grammarListener extends ParseTreeListener {
 	 */
 	void exitParametro(LPP_grammarParser.ParametroContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link LPP_grammarParser#declaracionesVariables}.
+	 * Enter a parse tree produced by {@link LPP_grammarParser#variable}.
 	 * @param ctx the parse tree
 	 */
-	void enterDeclaracionesVariables(LPP_grammarParser.DeclaracionesVariablesContext ctx);
+	void enterVariable(LPP_grammarParser.VariableContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link LPP_grammarParser#declaracionesVariables}.
+	 * Exit a parse tree produced by {@link LPP_grammarParser#variable}.
 	 * @param ctx the parse tree
 	 */
-	void exitDeclaracionesVariables(LPP_grammarParser.DeclaracionesVariablesContext ctx);
+	void exitVariable(LPP_grammarParser.VariableContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link LPP_grammarParser#declaracionVariables}.
+	 * Enter a parse tree produced by {@link LPP_grammarParser#tipo_dato}.
 	 * @param ctx the parse tree
 	 */
-	void enterDeclaracionVariables(LPP_grammarParser.DeclaracionVariablesContext ctx);
+	void enterTipo_dato(LPP_grammarParser.Tipo_datoContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link LPP_grammarParser#declaracionVariables}.
+	 * Exit a parse tree produced by {@link LPP_grammarParser#tipo_dato}.
 	 * @param ctx the parse tree
 	 */
-	void exitDeclaracionVariables(LPP_grammarParser.DeclaracionVariablesContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link LPP_grammarParser#tipo}.
-	 * @param ctx the parse tree
-	 */
-	void enterTipo(LPP_grammarParser.TipoContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link LPP_grammarParser#tipo}.
-	 * @param ctx the parse tree
-	 */
-	void exitTipo(LPP_grammarParser.TipoContext ctx);
+	void exitTipo_dato(LPP_grammarParser.Tipo_datoContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link LPP_grammarParser#listaIDs}.
 	 * @param ctx the parse tree
@@ -147,245 +127,45 @@ public interface LPP_grammarListener extends ParseTreeListener {
 	 */
 	void exitListaEnteros(LPP_grammarParser.ListaEnterosContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link LPP_grammarParser#sentenciasSubprograma}.
+	 * Enter a parse tree produced by {@link LPP_grammarParser#estructura}.
 	 * @param ctx the parse tree
 	 */
-	void enterSentenciasSubprograma(LPP_grammarParser.SentenciasSubprogramaContext ctx);
+	void enterEstructura(LPP_grammarParser.EstructuraContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link LPP_grammarParser#sentenciasSubprograma}.
+	 * Exit a parse tree produced by {@link LPP_grammarParser#estructura}.
 	 * @param ctx the parse tree
 	 */
-	void exitSentenciasSubprograma(LPP_grammarParser.SentenciasSubprogramaContext ctx);
+	void exitEstructura(LPP_grammarParser.EstructuraContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link LPP_grammarParser#sentenciasPrograma}.
+	 * Enter a parse tree produced by {@link LPP_grammarParser#accion}.
 	 * @param ctx the parse tree
 	 */
-	void enterSentenciasPrograma(LPP_grammarParser.SentenciasProgramaContext ctx);
+	void enterAccion(LPP_grammarParser.AccionContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link LPP_grammarParser#sentenciasPrograma}.
+	 * Exit a parse tree produced by {@link LPP_grammarParser#accion}.
 	 * @param ctx the parse tree
 	 */
-	void exitSentenciasPrograma(LPP_grammarParser.SentenciasProgramaContext ctx);
+	void exitAccion(LPP_grammarParser.AccionContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link LPP_grammarParser#sentencias}.
+	 * Enter a parse tree produced by {@link LPP_grammarParser#asignacion}.
 	 * @param ctx the parse tree
 	 */
-	void enterSentencias(LPP_grammarParser.SentenciasContext ctx);
+	void enterAsignacion(LPP_grammarParser.AsignacionContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link LPP_grammarParser#sentencias}.
+	 * Exit a parse tree produced by {@link LPP_grammarParser#asignacion}.
 	 * @param ctx the parse tree
 	 */
-	void exitSentencias(LPP_grammarParser.SentenciasContext ctx);
+	void exitAsignacion(LPP_grammarParser.AsignacionContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link LPP_grammarParser#sentencia}.
+	 * Enter a parse tree produced by {@link LPP_grammarParser#listaExpr}.
 	 * @param ctx the parse tree
 	 */
-	void enterSentencia(LPP_grammarParser.SentenciaContext ctx);
+	void enterListaExpr(LPP_grammarParser.ListaExprContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link LPP_grammarParser#sentencia}.
+	 * Exit a parse tree produced by {@link LPP_grammarParser#listaExpr}.
 	 * @param ctx the parse tree
 	 */
-	void exitSentencia(LPP_grammarParser.SentenciaContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link LPP_grammarParser#escriba}.
-	 * @param ctx the parse tree
-	 */
-	void enterEscriba(LPP_grammarParser.EscribaContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link LPP_grammarParser#escriba}.
-	 * @param ctx the parse tree
-	 */
-	void exitEscriba(LPP_grammarParser.EscribaContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link LPP_grammarParser#lea}.
-	 * @param ctx the parse tree
-	 */
-	void enterLea(LPP_grammarParser.LeaContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link LPP_grammarParser#lea}.
-	 * @param ctx the parse tree
-	 */
-	void exitLea(LPP_grammarParser.LeaContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link LPP_grammarParser#asignar}.
-	 * @param ctx the parse tree
-	 */
-	void enterAsignar(LPP_grammarParser.AsignarContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link LPP_grammarParser#asignar}.
-	 * @param ctx the parse tree
-	 */
-	void exitAsignar(LPP_grammarParser.AsignarContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link LPP_grammarParser#llamar}.
-	 * @param ctx the parse tree
-	 */
-	void enterLlamar(LPP_grammarParser.LlamarContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link LPP_grammarParser#llamar}.
-	 * @param ctx the parse tree
-	 */
-	void exitLlamar(LPP_grammarParser.LlamarContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link LPP_grammarParser#procedimientoLibreriaEstandar}.
-	 * @param ctx the parse tree
-	 */
-	void enterProcedimientoLibreriaEstandar(LPP_grammarParser.ProcedimientoLibreriaEstandarContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link LPP_grammarParser#procedimientoLibreriaEstandar}.
-	 * @param ctx the parse tree
-	 */
-	void exitProcedimientoLibreriaEstandar(LPP_grammarParser.ProcedimientoLibreriaEstandarContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link LPP_grammarParser#si}.
-	 * @param ctx the parse tree
-	 */
-	void enterSi(LPP_grammarParser.SiContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link LPP_grammarParser#si}.
-	 * @param ctx the parse tree
-	 */
-	void exitSi(LPP_grammarParser.SiContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link LPP_grammarParser#sino}.
-	 * @param ctx the parse tree
-	 */
-	void enterSino(LPP_grammarParser.SinoContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link LPP_grammarParser#sino}.
-	 * @param ctx the parse tree
-	 */
-	void exitSino(LPP_grammarParser.SinoContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link LPP_grammarParser#caso}.
-	 * @param ctx the parse tree
-	 */
-	void enterCaso(LPP_grammarParser.CasoContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link LPP_grammarParser#caso}.
-	 * @param ctx the parse tree
-	 */
-	void exitCaso(LPP_grammarParser.CasoContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link LPP_grammarParser#opcionCaso}.
-	 * @param ctx the parse tree
-	 */
-	void enterOpcionCaso(LPP_grammarParser.OpcionCasoContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link LPP_grammarParser#opcionCaso}.
-	 * @param ctx the parse tree
-	 */
-	void exitOpcionCaso(LPP_grammarParser.OpcionCasoContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link LPP_grammarParser#listaExprOpcion}.
-	 * @param ctx the parse tree
-	 */
-	void enterListaExprOpcion(LPP_grammarParser.ListaExprOpcionContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link LPP_grammarParser#listaExprOpcion}.
-	 * @param ctx the parse tree
-	 */
-	void exitListaExprOpcion(LPP_grammarParser.ListaExprOpcionContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link LPP_grammarParser#exprOpcion}.
-	 * @param ctx the parse tree
-	 */
-	void enterExprOpcion(LPP_grammarParser.ExprOpcionContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link LPP_grammarParser#exprOpcion}.
-	 * @param ctx the parse tree
-	 */
-	void exitExprOpcion(LPP_grammarParser.ExprOpcionContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link LPP_grammarParser#rangoExpr}.
-	 * @param ctx the parse tree
-	 */
-	void enterRangoExpr(LPP_grammarParser.RangoExprContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link LPP_grammarParser#rangoExpr}.
-	 * @param ctx the parse tree
-	 */
-	void exitRangoExpr(LPP_grammarParser.RangoExprContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link LPP_grammarParser#casoSino}.
-	 * @param ctx the parse tree
-	 */
-	void enterCasoSino(LPP_grammarParser.CasoSinoContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link LPP_grammarParser#casoSino}.
-	 * @param ctx the parse tree
-	 */
-	void exitCasoSino(LPP_grammarParser.CasoSinoContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link LPP_grammarParser#mientras}.
-	 * @param ctx the parse tree
-	 */
-	void enterMientras(LPP_grammarParser.MientrasContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link LPP_grammarParser#mientras}.
-	 * @param ctx the parse tree
-	 */
-	void exitMientras(LPP_grammarParser.MientrasContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link LPP_grammarParser#para}.
-	 * @param ctx the parse tree
-	 */
-	void enterPara(LPP_grammarParser.ParaContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link LPP_grammarParser#para}.
-	 * @param ctx the parse tree
-	 */
-	void exitPara(LPP_grammarParser.ParaContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link LPP_grammarParser#repita}.
-	 * @param ctx the parse tree
-	 */
-	void enterRepita(LPP_grammarParser.RepitaContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link LPP_grammarParser#repita}.
-	 * @param ctx the parse tree
-	 */
-	void exitRepita(LPP_grammarParser.RepitaContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link LPP_grammarParser#retorne}.
-	 * @param ctx the parse tree
-	 */
-	void enterRetorne(LPP_grammarParser.RetorneContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link LPP_grammarParser#retorne}.
-	 * @param ctx the parse tree
-	 */
-	void exitRetorne(LPP_grammarParser.RetorneContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link LPP_grammarParser#abrir}.
-	 * @param ctx the parse tree
-	 */
-	void enterAbrir(LPP_grammarParser.AbrirContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link LPP_grammarParser#abrir}.
-	 * @param ctx the parse tree
-	 */
-	void exitAbrir(LPP_grammarParser.AbrirContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link LPP_grammarParser#acceso}.
-	 * @param ctx the parse tree
-	 */
-	void enterAcceso(LPP_grammarParser.AccesoContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link LPP_grammarParser#acceso}.
-	 * @param ctx the parse tree
-	 */
-	void exitAcceso(LPP_grammarParser.AccesoContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link LPP_grammarParser#cerrar}.
-	 * @param ctx the parse tree
-	 */
-	void enterCerrar(LPP_grammarParser.CerrarContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link LPP_grammarParser#cerrar}.
-	 * @param ctx the parse tree
-	 */
-	void exitCerrar(LPP_grammarParser.CerrarContext ctx);
+	void exitListaExpr(LPP_grammarParser.ListaExprContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link LPP_grammarParser#escribir}.
 	 * @param ctx the parse tree
@@ -407,43 +187,93 @@ public interface LPP_grammarListener extends ParseTreeListener {
 	 */
 	void exitLeer(LPP_grammarParser.LeerContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link LPP_grammarParser#listaExpr}.
+	 * Enter a parse tree produced by {@link LPP_grammarParser#llamar}.
 	 * @param ctx the parse tree
 	 */
-	void enterListaExpr(LPP_grammarParser.ListaExprContext ctx);
+	void enterLlamar(LPP_grammarParser.LlamarContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link LPP_grammarParser#listaExpr}.
+	 * Exit a parse tree produced by {@link LPP_grammarParser#llamar}.
 	 * @param ctx the parse tree
 	 */
-	void exitListaExpr(LPP_grammarParser.ListaExprContext ctx);
+	void exitLlamar(LPP_grammarParser.LlamarContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link LPP_grammarParser#expr}.
+	 * Enter a parse tree produced by {@link LPP_grammarParser#condicional}.
 	 * @param ctx the parse tree
 	 */
-	void enterExpr(LPP_grammarParser.ExprContext ctx);
+	void enterCondicional(LPP_grammarParser.CondicionalContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link LPP_grammarParser#expr}.
+	 * Exit a parse tree produced by {@link LPP_grammarParser#condicional}.
 	 * @param ctx the parse tree
 	 */
-	void exitExpr(LPP_grammarParser.ExprContext ctx);
+	void exitCondicional(LPP_grammarParser.CondicionalContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link LPP_grammarParser#funcionLibreriaEstandar}.
+	 * Enter a parse tree produced by {@link LPP_grammarParser#sino}.
 	 * @param ctx the parse tree
 	 */
-	void enterFuncionLibreriaEstandar(LPP_grammarParser.FuncionLibreriaEstandarContext ctx);
+	void enterSino(LPP_grammarParser.SinoContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link LPP_grammarParser#funcionLibreriaEstandar}.
+	 * Exit a parse tree produced by {@link LPP_grammarParser#sino}.
 	 * @param ctx the parse tree
 	 */
-	void exitFuncionLibreriaEstandar(LPP_grammarParser.FuncionLibreriaEstandarContext ctx);
+	void exitSino(LPP_grammarParser.SinoContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link LPP_grammarParser#literal}.
+	 * Enter a parse tree produced by {@link LPP_grammarParser#casos}.
 	 * @param ctx the parse tree
 	 */
-	void enterLiteral(LPP_grammarParser.LiteralContext ctx);
+	void enterCasos(LPP_grammarParser.CasosContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link LPP_grammarParser#literal}.
+	 * Exit a parse tree produced by {@link LPP_grammarParser#casos}.
 	 * @param ctx the parse tree
 	 */
-	void exitLiteral(LPP_grammarParser.LiteralContext ctx);
+	void exitCasos(LPP_grammarParser.CasosContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link LPP_grammarParser#opcionCaso}.
+	 * @param ctx the parse tree
+	 */
+	void enterOpcionCaso(LPP_grammarParser.OpcionCasoContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link LPP_grammarParser#opcionCaso}.
+	 * @param ctx the parse tree
+	 */
+	void exitOpcionCaso(LPP_grammarParser.OpcionCasoContext ctx);
+	/**
+	 * E
+	 * @param ctx the parse tree
+	 */
+	void enterDefault(LPP_grammarParser.DefaultContext ctx);
+	/**
+	 * Ex
+	 * @param ctx the parse tree
+	 */
+	void exitDefault(LPP_grammarParser.DefaultContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link LPP_grammarParser#ciclos}.
+	 * @param ctx the parse tree
+	 */
+	void enterCiclos(LPP_grammarParser.CiclosContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link LPP_grammarParser#ciclos}.
+	 * @param ctx the parse tree
+	 */
+	void exitCiclos(LPP_grammarParser.CiclosContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link LPP_grammarParser#valores}.
+	 * @param ctx the parse tree
+	 */
+	void enterValores(LPP_grammarParser.ValoresContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link LPP_grammarParser#valores}.
+	 * @param ctx the parse tree
+	 */
+	void exitValores(LPP_grammarParser.ValoresContext ctx);
+	/**
+	 * Ente
+	 * @param ctx the parse tree
+	 */
+	void enterExpresion(LPP_grammarParser.ExpresionContext ctx);
+	/**
+	 * Exit a pa
+	 * @param ctx the parse tree
+	 */
+	void exitExpresion(LPP_grammarParser.ExpresionContext ctx);
 }

@@ -16,41 +16,35 @@ public interface LPP_grammarVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitPrograma(LPP_grammarParser.ProgramaContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link LPP_grammarParser#declaracionesTipos}.
+	 * Visit a parse tree produced by {@link LPP_grammarParser#registro}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitDeclaracionesTipos(LPP_grammarParser.DeclaracionesTiposContext ctx);
+	T visitRegistro(LPP_grammarParser.RegistroContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link LPP_grammarParser#declaracionRegistro}.
+	 * Visit a parse tree produced by {@link LPP_grammarParser#rutina}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitDeclaracionRegistro(LPP_grammarParser.DeclaracionRegistroContext ctx);
+	T visitRutina(LPP_grammarParser.RutinaContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link LPP_grammarParser#declaracionTipo}.
+	 * Visit a parse tree produced by {@link LPP_grammarParser#procedimiento}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitDeclaracionTipo(LPP_grammarParser.DeclaracionTipoContext ctx);
+	T visitProcedimiento(LPP_grammarParser.ProcedimientoContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link LPP_grammarParser#declaracionesSubprogramas}.
+	 * Visit a parse tree produced by {@link LPP_grammarParser#funcion}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitDeclaracionesSubprogramas(LPP_grammarParser.DeclaracionesSubprogramasContext ctx);
+	T visitFuncion(LPP_grammarParser.FuncionContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link LPP_grammarParser#declaracionProcedimiento}.
+	 * Visit a parse tree produced by {@link LPP_grammarParser#retorne}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitDeclaracionProcedimiento(LPP_grammarParser.DeclaracionProcedimientoContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link LPP_grammarParser#declaracionFuncion}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitDeclaracionFuncion(LPP_grammarParser.DeclaracionFuncionContext ctx);
+	T visitRetorne(LPP_grammarParser.RetorneContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link LPP_grammarParser#parametros}.
 	 * @param ctx the parse tree
@@ -64,23 +58,17 @@ public interface LPP_grammarVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitParametro(LPP_grammarParser.ParametroContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link LPP_grammarParser#declaracionesVariables}.
+	 * Visit a parse tree produced by {@link LPP_grammarParser#variable}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitDeclaracionesVariables(LPP_grammarParser.DeclaracionesVariablesContext ctx);
+	T visitVariable(LPP_grammarParser.VariableContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link LPP_grammarParser#declaracionVariables}.
+	 * Visit a parse tree produced by {@link LPP_grammarParser#tipo_dato}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitDeclaracionVariables(LPP_grammarParser.DeclaracionVariablesContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link LPP_grammarParser#tipo}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitTipo(LPP_grammarParser.TipoContext ctx);
+	T visitTipo_dato(LPP_grammarParser.Tipo_datoContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link LPP_grammarParser#listaIDs}.
 	 * @param ctx the parse tree
@@ -94,149 +82,29 @@ public interface LPP_grammarVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitListaEnteros(LPP_grammarParser.ListaEnterosContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link LPP_grammarParser#sentenciasSubprograma}.
+	 * Visit a parse tree produced by {@link LPP_grammarParser#estructura}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitSentenciasSubprograma(LPP_grammarParser.SentenciasSubprogramaContext ctx);
+	T visitEstructura(LPP_grammarParser.EstructuraContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link LPP_grammarParser#sentenciasPrograma}.
+	 * Visit a parse tree produced by {@link LPP_grammarParser#accion}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitSentenciasPrograma(LPP_grammarParser.SentenciasProgramaContext ctx);
+	T visitAccion(LPP_grammarParser.AccionContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link LPP_grammarParser#sentencias}.
+	 * Visit a parse tree produced by {@link LPP_grammarParser#asignacion}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitSentencias(LPP_grammarParser.SentenciasContext ctx);
+	T visitAsignacion(LPP_grammarParser.AsignacionContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link LPP_grammarParser#sentencia}.
+	 * Visit a parse tree produced by {@link LPP_grammarParser#listaExpr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitSentencia(LPP_grammarParser.SentenciaContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link LPP_grammarParser#escriba}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitEscriba(LPP_grammarParser.EscribaContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link LPP_grammarParser#lea}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitLea(LPP_grammarParser.LeaContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link LPP_grammarParser#asignar}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitAsignar(LPP_grammarParser.AsignarContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link LPP_grammarParser#llamar}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitLlamar(LPP_grammarParser.LlamarContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link LPP_grammarParser#procedimientoLibreriaEstandar}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitProcedimientoLibreriaEstandar(LPP_grammarParser.ProcedimientoLibreriaEstandarContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link LPP_grammarParser#si}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitSi(LPP_grammarParser.SiContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link LPP_grammarParser#sino}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitSino(LPP_grammarParser.SinoContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link LPP_grammarParser#caso}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitCaso(LPP_grammarParser.CasoContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link LPP_grammarParser#opcionCaso}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitOpcionCaso(LPP_grammarParser.OpcionCasoContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link LPP_grammarParser#listaExprOpcion}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitListaExprOpcion(LPP_grammarParser.ListaExprOpcionContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link LPP_grammarParser#exprOpcion}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitExprOpcion(LPP_grammarParser.ExprOpcionContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link LPP_grammarParser#rangoExpr}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitRangoExpr(LPP_grammarParser.RangoExprContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link LPP_grammarParser#casoSino}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitCasoSino(LPP_grammarParser.CasoSinoContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link LPP_grammarParser#mientras}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitMientras(LPP_grammarParser.MientrasContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link LPP_grammarParser#para}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitPara(LPP_grammarParser.ParaContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link LPP_grammarParser#repita}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitRepita(LPP_grammarParser.RepitaContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link LPP_grammarParser#retorne}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitRetorne(LPP_grammarParser.RetorneContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link LPP_grammarParser#abrir}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitAbrir(LPP_grammarParser.AbrirContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link LPP_grammarParser#acceso}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitAcceso(LPP_grammarParser.AccesoContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link LPP_grammarParser#cerrar}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitCerrar(LPP_grammarParser.CerrarContext ctx);
+	T visitListaExpr(LPP_grammarParser.ListaExprContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link LPP_grammarParser#escribir}.
 	 * @param ctx the parse tree
@@ -250,27 +118,57 @@ public interface LPP_grammarVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitLeer(LPP_grammarParser.LeerContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link LPP_grammarParser#listaExpr}.
+	 * Visit a parse tree produced by {@link LPP_grammarParser#llamar}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitListaExpr(LPP_grammarParser.ListaExprContext ctx);
+	T visitLlamar(LPP_grammarParser.LlamarContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link LPP_grammarParser#expr}.
+	 * Visit a parse tree produced by {@link LPP_grammarParser#condicional}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitExpr(LPP_grammarParser.ExprContext ctx);
+	T visitCondicional(LPP_grammarParser.CondicionalContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link LPP_grammarParser#funcionLibreriaEstandar}.
+	 * Visit a parse tree produced by {@link LPP_grammarParser#sino}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitFuncionLibreriaEstandar(LPP_grammarParser.FuncionLibreriaEstandarContext ctx);
+	T visitSino(LPP_grammarParser.SinoContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link LPP_grammarParser#literal}.
+	 * Visit a parse tree produced by {@link LPP_grammarParser#casos}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitLiteral(LPP_grammarParser.LiteralContext ctx);
+	T visitCasos(LPP_grammarParser.CasosContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link LPP_grammarParser#opcionCaso}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitOpcionCaso(LPP_grammarParser.OpcionCasoContext ctx);
+	/**
+
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDefault(LPP_grammarParser.DefaultContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link LPP_grammarParser#ciclos}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitCiclos(LPP_grammarParser.CiclosContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link LPP_grammarParser#valores}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitValores(LPP_grammarParser.ValoresContext ctx);
+	/**
+
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitExpresion(LPP_grammarParser.ExpresionContext ctx);
 }

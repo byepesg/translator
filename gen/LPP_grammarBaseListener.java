@@ -28,73 +28,61 @@ public class LPP_grammarBaseListener implements LPP_grammarListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterDeclaracionesTipos(LPP_grammarParser.DeclaracionesTiposContext ctx) { }
+	@Override public void enterRegistro(LPP_grammarParser.RegistroContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitDeclaracionesTipos(LPP_grammarParser.DeclaracionesTiposContext ctx) { }
+	@Override public void exitRegistro(LPP_grammarParser.RegistroContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterDeclaracionRegistro(LPP_grammarParser.DeclaracionRegistroContext ctx) { }
+	@Override public void enterRutina(LPP_grammarParser.RutinaContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitDeclaracionRegistro(LPP_grammarParser.DeclaracionRegistroContext ctx) { }
+	@Override public void exitRutina(LPP_grammarParser.RutinaContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterDeclaracionTipo(LPP_grammarParser.DeclaracionTipoContext ctx) { }
+	@Override public void enterProcedimiento(LPP_grammarParser.ProcedimientoContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitDeclaracionTipo(LPP_grammarParser.DeclaracionTipoContext ctx) { }
+	@Override public void exitProcedimiento(LPP_grammarParser.ProcedimientoContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterDeclaracionesSubprogramas(LPP_grammarParser.DeclaracionesSubprogramasContext ctx) { }
+	@Override public void enterFuncion(LPP_grammarParser.FuncionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitDeclaracionesSubprogramas(LPP_grammarParser.DeclaracionesSubprogramasContext ctx) { }
+	@Override public void exitFuncion(LPP_grammarParser.FuncionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterDeclaracionProcedimiento(LPP_grammarParser.DeclaracionProcedimientoContext ctx) { }
+	@Override public void enterRetorne(LPP_grammarParser.RetorneContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitDeclaracionProcedimiento(LPP_grammarParser.DeclaracionProcedimientoContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterDeclaracionFuncion(LPP_grammarParser.DeclaracionFuncionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitDeclaracionFuncion(LPP_grammarParser.DeclaracionFuncionContext ctx) { }
+	@Override public void exitRetorne(LPP_grammarParser.RetorneContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -124,37 +112,25 @@ public class LPP_grammarBaseListener implements LPP_grammarListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterDeclaracionesVariables(LPP_grammarParser.DeclaracionesVariablesContext ctx) { }
+	@Override public void enterVariable(LPP_grammarParser.VariableContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitDeclaracionesVariables(LPP_grammarParser.DeclaracionesVariablesContext ctx) { }
+	@Override public void exitVariable(LPP_grammarParser.VariableContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterDeclaracionVariables(LPP_grammarParser.DeclaracionVariablesContext ctx) { }
+	@Override public void enterTipo_dato(LPP_grammarParser.Tipo_datoContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitDeclaracionVariables(LPP_grammarParser.DeclaracionVariablesContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterTipo(LPP_grammarParser.TipoContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitTipo(LPP_grammarParser.TipoContext ctx) { }
+	@Override public void exitTipo_dato(LPP_grammarParser.Tipo_datoContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -184,289 +160,49 @@ public class LPP_grammarBaseListener implements LPP_grammarListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterSentenciasSubprograma(LPP_grammarParser.SentenciasSubprogramaContext ctx) { }
+	@Override public void enterEstructura(LPP_grammarParser.EstructuraContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitSentenciasSubprograma(LPP_grammarParser.SentenciasSubprogramaContext ctx) { }
+	@Override public void exitEstructura(LPP_grammarParser.EstructuraContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterSentenciasPrograma(LPP_grammarParser.SentenciasProgramaContext ctx) { }
+	@Override public void enterAccion(LPP_grammarParser.AccionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitSentenciasPrograma(LPP_grammarParser.SentenciasProgramaContext ctx) { }
+	@Override public void exitAccion(LPP_grammarParser.AccionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterSentencias(LPP_grammarParser.SentenciasContext ctx) { }
+	@Override public void enterAsignacion(LPP_grammarParser.AsignacionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitSentencias(LPP_grammarParser.SentenciasContext ctx) { }
+	@Override public void exitAsignacion(LPP_grammarParser.AsignacionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterSentencia(LPP_grammarParser.SentenciaContext ctx) { }
+	@Override public void enterListaExpr(LPP_grammarParser.ListaExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitSentencia(LPP_grammarParser.SentenciaContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterEscriba(LPP_grammarParser.EscribaContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitEscriba(LPP_grammarParser.EscribaContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterLea(LPP_grammarParser.LeaContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitLea(LPP_grammarParser.LeaContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterAsignar(LPP_grammarParser.AsignarContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitAsignar(LPP_grammarParser.AsignarContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterLlamar(LPP_grammarParser.LlamarContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitLlamar(LPP_grammarParser.LlamarContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterProcedimientoLibreriaEstandar(LPP_grammarParser.ProcedimientoLibreriaEstandarContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitProcedimientoLibreriaEstandar(LPP_grammarParser.ProcedimientoLibreriaEstandarContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterSi(LPP_grammarParser.SiContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitSi(LPP_grammarParser.SiContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterSino(LPP_grammarParser.SinoContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitSino(LPP_grammarParser.SinoContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterCaso(LPP_grammarParser.CasoContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitCaso(LPP_grammarParser.CasoContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterOpcionCaso(LPP_grammarParser.OpcionCasoContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitOpcionCaso(LPP_grammarParser.OpcionCasoContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterListaExprOpcion(LPP_grammarParser.ListaExprOpcionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitListaExprOpcion(LPP_grammarParser.ListaExprOpcionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterExprOpcion(LPP_grammarParser.ExprOpcionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitExprOpcion(LPP_grammarParser.ExprOpcionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterRangoExpr(LPP_grammarParser.RangoExprContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitRangoExpr(LPP_grammarParser.RangoExprContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterCasoSino(LPP_grammarParser.CasoSinoContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitCasoSino(LPP_grammarParser.CasoSinoContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterMientras(LPP_grammarParser.MientrasContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitMientras(LPP_grammarParser.MientrasContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterPara(LPP_grammarParser.ParaContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitPara(LPP_grammarParser.ParaContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterRepita(LPP_grammarParser.RepitaContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitRepita(LPP_grammarParser.RepitaContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterRetorne(LPP_grammarParser.RetorneContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitRetorne(LPP_grammarParser.RetorneContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterAbrir(LPP_grammarParser.AbrirContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitAbrir(LPP_grammarParser.AbrirContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterAcceso(LPP_grammarParser.AccesoContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitAcceso(LPP_grammarParser.AccesoContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterCerrar(LPP_grammarParser.CerrarContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitCerrar(LPP_grammarParser.CerrarContext ctx) { }
+	@Override public void exitListaExpr(LPP_grammarParser.ListaExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -496,49 +232,109 @@ public class LPP_grammarBaseListener implements LPP_grammarListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterListaExpr(LPP_grammarParser.ListaExprContext ctx) { }
+	@Override public void enterLlamar(LPP_grammarParser.LlamarContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitListaExpr(LPP_grammarParser.ListaExprContext ctx) { }
+	@Override public void exitLlamar(LPP_grammarParser.LlamarContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExpr(LPP_grammarParser.ExprContext ctx) { }
+	@Override public void enterCondicional(LPP_grammarParser.CondicionalContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitExpr(LPP_grammarParser.ExprContext ctx) { }
+	@Override public void exitCondicional(LPP_grammarParser.CondicionalContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterFuncionLibreriaEstandar(LPP_grammarParser.FuncionLibreriaEstandarContext ctx) { }
+	@Override public void enterSino(LPP_grammarParser.SinoContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitFuncionLibreriaEstandar(LPP_grammarParser.FuncionLibreriaEstandarContext ctx) { }
+	@Override public void exitSino(LPP_grammarParser.SinoContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterLiteral(LPP_grammarParser.LiteralContext ctx) { }
+	@Override public void enterCasos(LPP_grammarParser.CasosContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitLiteral(LPP_grammarParser.LiteralContext ctx) { }
+	@Override public void exitCasos(LPP_grammarParser.CasosContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterOpcionCaso(LPP_grammarParser.OpcionCasoContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitOpcionCaso(LPP_grammarParser.OpcionCasoContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterDefault(LPP_grammarParser.DefaultContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitDefault(LPP_grammarParser.DefaultContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterCiclos(LPP_grammarParser.CiclosContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitCiclos(LPP_grammarParser.CiclosContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterValores(LPP_grammarParser.ValoresContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitValores(LPP_grammarParser.ValoresContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterExpresion(LPP_grammarParser.ExpresionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitExpresion(LPP_grammarParser.ExpresionContext ctx) { }
 
 	/**
 	 * {@inheritDoc}
