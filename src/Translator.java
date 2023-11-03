@@ -1,4 +1,6 @@
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /** Convert short array inits like {1,2,3} to "\u0001\u0002\u0003" */
 
@@ -31,8 +33,6 @@ public class Translator extends LPP_grammarBaseListener{
     private Map<String, Object []> tags = new HashMap<>();
     private String activeTag ="";
     private String code ="";
-    public Translator() {
-    }
     @Override public void enterPrograma(LPP_grammarParser.ProgramaContext ctx) {
 
         System.out.println("###This is the python translation");
@@ -40,6 +40,7 @@ public class Translator extends LPP_grammarBaseListener{
     }
 
     @Override public void enterVariable(LPP_grammarParser.VariableContext ctx) {
+        this.applyIdentation();
         if (ctx.listaIDs() != null) {
             //int countIDs = false;
             String varTmp = null;
@@ -48,8 +49,8 @@ public class Translator extends LPP_grammarBaseListener{
             for(int i = 0; i < countIDs; ++i) {
                 if (i % 2 == 0) {
                     String var10000 =
-                            ctx.getChild(1).getChild(i).getText();
-                    varTmp = var10000 + " = 0\t\n";
+                            ctx.getChild(1).getChild(i).getText().toLowerCase();
+                    varTmp = var10000 + " = 0\n";
                     this.codeBuilder.append(varTmp);
                 }
             }
@@ -60,26 +61,44 @@ public class Translator extends LPP_grammarBaseListener{
     }
 
 
-    @Override public void enterAccion(LPP_grammarParser.AccionContext ctx) { }
+    @Override public void enterAccion(LPP_grammarParser.AccionContext ctx) {
+        this.applyIdentation();
+    }
 
     @Override public void exitAccion(LPP_grammarParser.AccionContext ctx) { }
 
     @Override public void enterAsignacion(LPP_grammarParser.AsignacionContext ctx) {
-
         if (!this.isLoop && !this.isLoop) {
             StringBuilder var10000 = this.codeBuilder;
-            String var10001 = ctx.getChild(0).getText();
-            var10000.append(var10001 + "=" + ctx.getChild(2).getText() +
-                    "\n");
+            String var10001 = ctx.getChild(0).getText().toLowerCase();
+            var10000.append(var10001 + " = ");
         }
     }
     @Override public void enterExpresion(LPP_grammarParser.ExpresionContext ctx) {
-
-
-
-
-
+        if (ctx.getChild(0).getText().equals("(")) {
+            this.codeBuilder.append("( "+ ctx.getChild(1).toString()+" )");
+        }
+        else if (ctx.getChildCount() == 3){
+            this.codeBuilder.append(ctx.getChild(0).getText().toLowerCase()+ctx.getChild(1).getText()+ctx.getChild(2).getText().toLowerCase());
+        }
+        else {
+            this.codeBuilder.append(ctx.getChild(0).getText());
+        }
     }
+
+    @Override public void enterValores(LPP_grammarParser.ValoresContext ctx) {
+        String text = ctx.getChild(0).getText();
+        Pattern pattern = Pattern.compile("~[\"] | ~[']" );
+        Matcher matcher = pattern.matcher(text);
+        if(matcher.find()) {
+            this.codeBuilder.append(ctx.getChild(0).getText());
+        }
+        else{
+            this.codeBuilder.append(ctx.getChild(0).getText().toLowerCase());
+        }
+    }
+
+    @Override public void exitValores(LPP_grammarParser.ValoresContext ctx) { }
 
     @Override public void exitExpresion(LPP_grammarParser.ExpresionContext ctx) { }
 
@@ -92,7 +111,7 @@ public class Translator extends LPP_grammarBaseListener{
         this.applyIdentation();
         if (ctx.getChild(0).getText().equals("para")) {
             StringBuilder var10000 = this.codeBuilder;
-            String var10001 = ctx.getChild(1).getChild(0).getText();
+            String var10001 = ctx.getChild(1).getChild(0).getText().toLowerCase();
             var10000.append("for " + var10001 + " in range(" +
                     ctx.getChild(1).getChild(2).getText() + "," + ctx.getChild(3).getText() +
                     "):\n");
@@ -113,19 +132,22 @@ public class Translator extends LPP_grammarBaseListener{
 
     @Override public void enterEscribir(LPP_grammarParser.EscribirContext ctx) {
         this.applyIdentation();
-        this.codeBuilder.append("print(" + ctx.getChild(1).getText() +
-                ")\n");
+        this.codeBuilder.append("print(" + ctx.getChild(1).getText());
     }
 
     @Override public void exitEscribir(LPP_grammarParser.EscribirContext ctx) {
+        this.codeBuilder.append(")\n");
     }
 
 
     @Override public void enterFuncion(LPP_grammarParser.FuncionContext ctx) {
-
         this.identationLevel += 1;
-        codeBuilder.append("def " + ctx.getChild(1).toString());
-
+        if(ctx.getChild(2).getText().equals("(")) {
+            codeBuilder.append("def " + ctx.getChild(1).toString().toLowerCase());
+        }
+        else {
+            codeBuilder.append("def " + ctx.getChild(1).toString().toLowerCase()+" ():");
+        }
     }
 
     @Override public void exitFuncion(LPP_grammarParser.FuncionContext ctx) {
@@ -139,16 +161,21 @@ public class Translator extends LPP_grammarBaseListener{
     }
 
     @Override public void exitParametros(LPP_grammarParser.ParametrosContext ctx) {
-        codeBuilder.append("):\n");
+        if(ctx.getParent().getStart().getText().equalsIgnoreCase("funcion")){
+            codeBuilder.append("):\n");
+        }
+        else {
+            codeBuilder.append(")");
+        }
     }
 
     @Override public void enterParametro(LPP_grammarParser.ParametroContext ctx) {
 
         if (this.parametros == 1) {
-            codeBuilder.append(ctx.getChild(1).toString());
+            codeBuilder.append(ctx.getChild(1).toString().toLowerCase());
         }
         else {
-            codeBuilder.append(ctx.getChild(1).toString() + ctx.getParent().getChild(1));
+            codeBuilder.append(ctx.getChild(1).toString().toLowerCase() + ctx.getParent().getChild(1) + " ");
             this.parametros -= 2;
         }
     }
@@ -190,7 +217,7 @@ public class Translator extends LPP_grammarBaseListener{
 
     public void applyIdentation() {
         if (this.getIdentationLevel() > 0) {
-            for(int i = 0; i <= this.getIdentationLevel(); ++i) {
+            for(int i = 0; i < this.getIdentationLevel(); ++i) {
                 this.codeBuilder.append("\t");
             }
         }
