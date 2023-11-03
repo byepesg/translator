@@ -156,14 +156,36 @@ public class Translator extends LPP_grammarBaseListener{
     @Override public void enterTipo_dato(LPP_grammarParser.Tipo_datoContext ctx) {
 
     }
+    @Override public void enterLlamar(LPP_grammarParser.LlamarContext ctx) {
 
+        if(ctx.getChild(1).equals("nueva_linea")){
+            codeBuilder.append("\n");
+        }
+
+    }
+
+    @Override public void exitLlamar(LPP_grammarParser.LlamarContext ctx) { }
     @Override public void exitTipo_dato(LPP_grammarParser.Tipo_datoContext ctx) { }
     public int getIdentationLevel() {
         return this.identationLevel;
     }
+    @Override public void enterCondicional(LPP_grammarParser.CondicionalContext ctx) {
+        setIdentationLevelUp();
+        applyIdentation();
+        System.out.println("if "+ctx.getChild(1).getText()+":");
 
-    public void setIdentationLevel() {
+
+
+    }
+
+    @Override public void exitCondicional(LPP_grammarParser.CondicionalContext ctx) {
+        setIdentationLevelDown();
+    }
+    public void setIdentationLevelUp() {
         ++this.identationLevel;
+    }
+    public void setIdentationLevelDown() {
+        --this.identationLevel;
     }
 
     public void applyIdentation() {
