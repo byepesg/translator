@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
+
 public class Main {
     public static void main(String[] args) throws IOException {
         // Press Alt+Intro with your caret at the highlighted text to see how
@@ -36,9 +37,11 @@ public class Main {
         // Create a generic parse tree walker that can trigger callbacks
          ParseTreeWalker walker = new ParseTreeWalker();
          // Walk the tree created during the parse, trigger callbacks
-        walker.walk(new Translator(), tree);
+        Translator obj = new Translator();
+        walker.walk(obj, tree);
         //System.out.println("Holli"); // print a \n after translation
 
+        System.out.println(obj.getCode());
 
         }
     }

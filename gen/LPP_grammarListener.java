@@ -1,4 +1,4 @@
-// Generated from C:/Users/Asus/Desktop/UNAL/SEMESTRE11/Lenguajes_programacion/TRADUCTOR/translator/grammar/LPP_grammar.g4 by ANTLR 4.13.1
+// Generated from /Users/byepesg/Documents/Unal/2023-II/ProgrammingLanguages/translator/translator/grammar/LPP_grammar.g4 by ANTLR 4.13.1
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
 /**
@@ -237,12 +237,12 @@ public interface LPP_grammarListener extends ParseTreeListener {
 	 */
 	void exitOpcionCaso(LPP_grammarParser.OpcionCasoContext ctx);
 	/**
-	 * E
+	 * Enter a parse tree produced by {@link LPP_grammarParser#default}.
 	 * @param ctx the parse tree
 	 */
 	void enterDefault(LPP_grammarParser.DefaultContext ctx);
 	/**
-	 * Ex
+	 * Exit a parse tree produced by {@link LPP_grammarParser#default}.
 	 * @param ctx the parse tree
 	 */
 	void exitDefault(LPP_grammarParser.DefaultContext ctx);
@@ -267,12 +267,12 @@ public interface LPP_grammarListener extends ParseTreeListener {
 	 */
 	void exitValores(LPP_grammarParser.ValoresContext ctx);
 	/**
-	 * Ente
+	 * Enter a parse tree produced by {@link LPP_grammarParser#expresion}.
 	 * @param ctx the parse tree
 	 */
 	void enterExpresion(LPP_grammarParser.ExpresionContext ctx);
 	/**
-	 * Exit a pa
+	 * Exit a parse tree produced by {@link LPP_grammarParser#expresion}.
 	 * @param ctx the parse tree
 	 */
 	void exitExpresion(LPP_grammarParser.ExpresionContext ctx);

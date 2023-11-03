@@ -5,7 +5,7 @@ entero coef
 entero space
 entero i
 entero j
-
+entero k,l,m,n
 inicio
    rows <- 8
 

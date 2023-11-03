@@ -34,7 +34,7 @@ escribir: ESCRIBA listaExpr;
 //leer: LEA ID asignacion_auxiliar (',' ID)*;
 leer: LEA expresion;
 
-llamar: LLAMAR NUEVA_LINEA | LLAMAR ID ( '(' listaExpr? ')' );
+llamar: LLAMAR NUEVA_LINEA | LLAMAR ID ( '(' listaExpr? ')' )?;
 
 condicional: SI expresion ENTONCES accion* sino? FIN SI;
 sino: SINO condicional | SINO accion*;

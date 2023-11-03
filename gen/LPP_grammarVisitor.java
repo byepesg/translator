@@ -1,4 +1,4 @@
-// Generated from C:/Users/Asus/Desktop/UNAL/SEMESTRE11/Lenguajes_programacion/TRADUCTOR/translator/grammar/LPP_grammar.g4 by ANTLR 4.13.1
+// Generated from /Users/byepesg/Documents/Unal/2023-II/ProgrammingLanguages/translator/translator/grammar/LPP_grammar.g4 by ANTLR 4.13.1
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
 /**
@@ -148,7 +148,7 @@ public interface LPP_grammarVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitOpcionCaso(LPP_grammarParser.OpcionCasoContext ctx);
 	/**
-
+	 * Visit a parse tree produced by {@link LPP_grammarParser#default}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
@@ -166,7 +166,7 @@ public interface LPP_grammarVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitValores(LPP_grammarParser.ValoresContext ctx);
 	/**
-
+	 * Visit a parse tree produced by {@link LPP_grammarParser#expresion}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
