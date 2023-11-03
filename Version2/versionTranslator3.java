@@ -96,7 +96,7 @@ ctx.getChild(1).getChild(i).getText();
 
     public void enterCiclos(LPP_grammarParser$CiclosContext ctx) {
         this.isLoop = true;
-        this.setIdentationLevel();
+        this.setIdentationLevelUp();
         this.applyIdentation();
         if (ctx.getChild(0).getText().equals("para")) {
             StringBuilder var10000 = this.codeBuilder;
