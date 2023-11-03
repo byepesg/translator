@@ -5,7 +5,11 @@ import java.util.*;
 public class Translator extends LPP_grammarBaseListener{
     private final StringBuilder codeBuilder = new StringBuilder();
     private int identationLevel = 0;
+
+    private int parametros = 0;
     private boolean isLoop = false;
+
+    private boolean isFunction = false;
     //params for special cases
     //check if we are in a condition
     private final boolean control_structure_conditonal = false;
@@ -40,7 +44,7 @@ public class Translator extends LPP_grammarBaseListener{
             countIDs=ctx.getChild(1).getChildCount();
             for (int i =0;i<countIDs;i++){
                 if (i%2==0){
-                    varTmp = ctx.getChild(1).getChild(i).getText()+" = 0"+"\t"+"\n";
+                    varTmp = ctx.getChild(1).getChild(i).getText()+" = 0"+"\n";
                     //System.out.println(varTmp);
                     codeBuilder.append(varTmp);
 
@@ -137,9 +141,48 @@ public class Translator extends LPP_grammarBaseListener{
     @Override public void exitCiclos(LPP_grammarParser.CiclosContext ctx) {
 
         this.identationLevel -= 1;
-        isLoop = true;
+        isLoop = false;
 
     }
+
+    @Override public void enterFuncion(LPP_grammarParser.FuncionContext ctx) {
+
+        this.identationLevel += 1;
+        codeBuilder.append("def " + ctx.getChild(1).toString());
+
+    }
+
+    @Override public void exitFuncion(LPP_grammarParser.FuncionContext ctx) {
+        this.identationLevel -= 1;
+        codeBuilder.append("\n");
+    }
+
+    @Override public void enterParametros(LPP_grammarParser.ParametrosContext ctx) {
+        this.parametros = ctx.getChildCount();
+        codeBuilder.append(" (");
+    }
+
+    @Override public void exitParametros(LPP_grammarParser.ParametrosContext ctx) {
+        codeBuilder.append("):\n");
+    }
+
+    @Override public void enterParametro(LPP_grammarParser.ParametroContext ctx) {
+
+        if (this.parametros == 1) {
+            codeBuilder.append(ctx.getChild(1).toString());
+        }
+        else {
+            codeBuilder.append(ctx.getChild(1).toString() + ctx.getParent().getChild(1));
+            this.parametros -= 2;
+        }
+    }
+
+    @Override public void enterTipo_dato(LPP_grammarParser.Tipo_datoContext ctx) {
+
+    }
+
+    @Override public void exitTipo_dato(LPP_grammarParser.Tipo_datoContext ctx) { }
+
     public String getCode() {
         //System.out.println(codeBuilder.toString());
         return codeBuilder.toString();
