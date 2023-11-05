@@ -11,7 +11,7 @@ public class Translator extends LPP_grammarBaseListener{
     private int parametros = 0;
     private boolean isLoop = false;
 
-    private boolean isFunction = false;
+    private boolean isList = false;
     //params for special cases
     //check if we are in a condition
     private final boolean control_structure_conditonal = false;
@@ -74,31 +74,55 @@ public class Translator extends LPP_grammarBaseListener{
             var10000.append(var10001 + " = ");
         }
     }
+
+    @Override public void exitAsignacion(LPP_grammarParser.AsignacionContext ctx) {
+        this.codeBuilder.append("\n");
+    }
+
     @Override public void enterExpresion(LPP_grammarParser.ExpresionContext ctx) {
-        if (ctx.getChild(0).getText().equals("(")) {
-            this.codeBuilder.append("( "+ ctx.getChild(1).toString()+" )");
-        }
-        else if (ctx.getChildCount() == 3){
-            this.codeBuilder.append(ctx.getChild(0).getText().toLowerCase()+ctx.getChild(1).getText()+ctx.getChild(2).getText().toLowerCase());
+        if(this.isList) {
+            if (ctx.getChild(0).getText().equals("(")) {
+                this.codeBuilder.append("( " + ctx.getChild(1).getText() + " ), ");
+            } else if (ctx.getChildCount() == 3) {
+                this.codeBuilder.append(ctx.getChild(0).getText().toLowerCase() + ctx.getChild(1).getText() + ctx.getChild(2).getText().toLowerCase()+", ");
+            }
+            if(ctx.ID() != null){
+                //this.codeBuilder.append(ctx.getChild(0).getText().toLowerCase()+", ");
+            }
         }
         else {
-            this.codeBuilder.append(ctx.getChild(0).getText());
+            if (ctx.getChild(0).getText().equals("(")) {
+                this.codeBuilder.append("( " + ctx.getChild(1).getText() + " )");
+            } else if (ctx.getChildCount() == 3) {
+                this.codeBuilder.append(ctx.getChild(0).getText().toLowerCase() + ctx.getChild(1).getText() + ctx.getChild(2).getText().toLowerCase());
+            }
+            if(ctx.ID() != null){
+                //this.codeBuilder.append(ctx.getChild(0).getText().toLowerCase());
+            }
+            /*else if (ctx.getChildCount() == 1){
+                String txt = ctx.getChild(0).getText();
+                String regex = "\"(.*?)\"|'(.)'";
+                Pattern pattern = Pattern.compile(regex);
+                Matcher matcher = pattern.matcher(txt);
+                if (!matcher.find()){
+                    //this.codeBuilder.append(ctx.getChild(0).getText().toLowerCase());
+             }*/
         }
+    }
+
+    @Override public void enterListaExpr(LPP_grammarParser.ListaExprContext ctx) {
+        this.isList = true;
+    }
+    @Override public void exitListaExpr(LPP_grammarParser.ListaExprContext ctx) {
+        this.isList = false;
     }
 
     @Override public void enterValores(LPP_grammarParser.ValoresContext ctx) {
-        String text = ctx.getChild(0).getText();
-        Pattern pattern = Pattern.compile("~[\"] | ~[']" );
-        Matcher matcher = pattern.matcher(text);
-        if(matcher.find()) {
-            this.codeBuilder.append(ctx.getChild(0).getText());
-        }
-        else{
-            this.codeBuilder.append(ctx.getChild(0).getText().toLowerCase());
-        }
+        this.codeBuilder.append(ctx.getChild(0).getText());
     }
 
-    @Override public void exitValores(LPP_grammarParser.ValoresContext ctx) { }
+    @Override public void exitValores(LPP_grammarParser.ValoresContext ctx) {
+    }
 
     @Override public void exitExpresion(LPP_grammarParser.ExpresionContext ctx) { }
 
@@ -132,7 +156,7 @@ public class Translator extends LPP_grammarBaseListener{
 
     @Override public void enterEscribir(LPP_grammarParser.EscribirContext ctx) {
         this.applyIdentation();
-        this.codeBuilder.append("print(" + ctx.getChild(1).getText());
+        this.codeBuilder.append("print(");
     }
 
     @Override public void exitEscribir(LPP_grammarParser.EscribirContext ctx) {
@@ -146,7 +170,7 @@ public class Translator extends LPP_grammarBaseListener{
             codeBuilder.append("def " + ctx.getChild(1).toString().toLowerCase());
         }
         else {
-            codeBuilder.append("def " + ctx.getChild(1).toString().toLowerCase()+" ():");
+            codeBuilder.append("def " + ctx.getChild(1).toString().toLowerCase()+" (): ");
         }
     }
 
@@ -185,8 +209,8 @@ public class Translator extends LPP_grammarBaseListener{
     }
     @Override public void enterLlamar(LPP_grammarParser.LlamarContext ctx) {
 
-        if(ctx.getChild(1).equals("nueva_linea")){
-            codeBuilder.append("\n");
+        if(ctx.getChild(1).getText().equalsIgnoreCase("nueva_linea")){
+            codeBuilder.append("print(\""+"\\n\")"+"\n");
         }
 
     }

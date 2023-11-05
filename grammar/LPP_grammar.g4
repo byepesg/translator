@@ -45,9 +45,15 @@ default: SINO ':'accion*;
 
 ciclos: MIENTRAS expresion HAGA accion* FIN MIENTRAS | REPITA accion* HASTA expresion | PARA asignacion HASTA expresion HAGA accion* FIN PARA;
 
-valores: INTEGER | DOUBLE | CHAR | STRING | (VERDADERO | FALSO);
+valores: integer | double | char | string | boolean;
 expresion: '(' expresion ')' | valores | ID | expresion '.' ID | expresion '[' listaExpr ']' | ID '(' listaExpr? ')' | '-' expresion | NO expresion | <assoc=right> expresion '^' expresion | expresion ( '*' | '/' | DIV | MOD ) expresion | expresion ( '+' | '-' ) expresion | expresion ( '=' | '<>' | '<=' | '>=' | '<' | '>' ) expresion | expresion OP_Y expresion | expresion OP_O expresion;
 
+
+integer: INTEGER;
+double: DOUBLE;
+char: CHAR;
+string: STRING;
+boolean: (VERDADERO | FALSO);
 // REGLAS LEXICAS
 INICIO : I N I C I O ;
 FIN : F I N ;
