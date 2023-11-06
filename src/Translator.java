@@ -164,11 +164,20 @@ public class Translator extends LPP_grammarBaseListener{
     }
     @Override public void enterCiclos(LPP_grammarParser.CiclosContext ctx) {
         this.isLoop = true;
-        this.setIndentationLevelUp();
-        this.applyIndentation();
+
+        if (getIndentationLevel() ==0){
+            this.applyIndentation();
+            this.setIndentationLevelUp();
+        }
+        else{
+
+            this.applyIndentation();
+            this.setIndentationLevelUp();
+        }
+
         if (ctx.getChild(0).getText().equals("para")) {
             StringBuilder var10000 = this.codeBuilder;
-            String var10001 = ctx.getChild(1).getChild(0).getText().toLowerCase();
+            String var10001 = ctx.getChild(1).getChild(0).getText();
             var10000.append("for " + var10001 + " in range(" +
                     ctx.getChild(1).getChild(2).getText() + "," + ctx.getChild(3).getText() +
                     "):\n");
@@ -271,14 +280,55 @@ public class Translator extends LPP_grammarBaseListener{
     @Override public void enterCondicional(LPP_grammarParser.CondicionalContext ctx) {
         setIndentationLevelUp();
         applyIndentation();
-        System.out.println("if "+ctx.getChild(1).getText()+":");
+        String logicOperator = "";
 
+
+        int length = ctx.getChild(1).getChildCount();
+        for(int i= 0; i<length;i++){
+            if(i%2!=0){
+                if(ctx.getChild(1).getChild(i).getText().equals("o")){
+                    logicOperator = "or" ;
+                }
+                else if(ctx.getChild(i).equals("y")){
+                    logicOperator = "and" ;
+                }
+            }
+        }
+
+        if(ctx.getChild(3).getText().contains("sino") || ctx.getChild(3).getText().equals("null")){
+
+        }
+        else{
+            codeBuilder.append("if ");
+            codeBuilder.append(ctx.getChild(1).getChild(0).getText());
+            codeBuilder.append(logicOperator+ctx.getChild(1).getChild(2).getText());
+            codeBuilder.append(":\n");
+            setIndentationLevelUp();
+            applyIndentation();
+            codeBuilder.append(ctx.getChild(3).getText());
+            setIndentationLevelDown();
+            codeBuilder.append(":\n");
+            //System.out.println("if "+ctx.getChild(1).getChild(0).getText()+logicOperator+ctx.getChild(1).getChild(2).getText()+":");
+        }
 
 
     }
 
     @Override public void exitCondicional(LPP_grammarParser.CondicionalContext ctx) {
         setIndentationLevelDown();
+    }
+    @Override public void enterSino(LPP_grammarParser.SinoContext ctx) {
+        applyIndentation();
+        this.setIndentationLevelUp();
+        if(ctx.getChildCount()==2){
+            codeBuilder.append("else:\n");
+            this.applyIndentation();
+            codeBuilder.append(ctx.getChild(1).getText()+"\n");
+        }
+    }
+
+    @Override public void exitSino(LPP_grammarParser.SinoContext ctx) {
+        this.setIndentationLevelDown();
     }
     public void setIndentationLevelUp() {
         ++this.indentationLevel;
