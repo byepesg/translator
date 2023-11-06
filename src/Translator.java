@@ -11,11 +11,13 @@ public class Translator extends LPP_grammarBaseListener{
     private int parametros = 0;
     private boolean isLoop = false;
     private boolean isParametro = false;
+    private String logicOperator = "";
     private boolean isFunction = false;
     private boolean isAsign = false;
     private boolean isVariable = false;
     private boolean isCondition = false;
     private boolean isExpresion = false;
+    private boolean isNegation = false;
 
     private boolean isList = false;
     //params for special cases
@@ -81,8 +83,21 @@ public class Translator extends LPP_grammarBaseListener{
             this.codeBuilder.append(ctx.getChild(0).getText().toLowerCase()+ctx.getChild(1).getText()+ctx.getChild(2).getText().toLowerCase()+"\n");
         }
         else if(ctx.getChildCount() == 3 && this.isCondition){
-            this.codeBuilder.append(ctx.getChild(0).getText().toLowerCase()+ctx.getChild(1).getText()+ctx.getChild(2).getText().toLowerCase() + "\n");
+            if (ctx.getChild(1).getText().equals("=")) {
+                this.logicOperator = " == ";
+            }
+            else if(ctx.getChild(1).getText().equals("<>")){
+                this.logicOperator = "!=";
+            }
+            else {
+                this.logicOperator = ctx.getChild(1).getText();
+            }
         }
+        else if (ctx.getChildCount() == 2 && this.isCondition && ctx.getChild(0).getText().equalsIgnoreCase("no")) {
+            this.isNegation = true;
+            this.logicOperator = "not";
+        }
+        this.codeBuilder.append( ctx.getChild(0).getText());
     }
 
     @Override public void enterListaExpr(LPP_grammarParser.ListaExprContext ctx) {
@@ -94,6 +109,7 @@ public class Translator extends LPP_grammarBaseListener{
 
     @Override public void exitExpresion(LPP_grammarParser.ExpresionContext ctx) {
         this.isExpresion = false;
+        this.isNegation = false;
         if (this.isList){
             this.codeBuilder.append(", ");
         }
@@ -125,7 +141,7 @@ public class Translator extends LPP_grammarBaseListener{
         this.codeBuilder.append(ctx.getChild(0).getText());
     }
     @Override public void enterId(LPP_grammarParser.IdContext ctx) {
-        if (this.parametros == 1) {
+        if (this.parametros <= 1) {
             if(this.isAsign && !this.isLoop) {
                 this.codeBuilder.append(ctx.getChild(0).getText().toLowerCase() + " = ");
             }
@@ -143,6 +159,18 @@ public class Translator extends LPP_grammarBaseListener{
             }
             else if (this.isLoop) {
 
+            }
+            else if (this.isCondition) {
+                if (this.isExpresion) {
+                    if (!this.logicOperator.isEmpty()) {
+                        if (this.isNegation) {
+                            this.codeBuilder.append(this.logicOperator + " " + ctx.getChild(0).getText().toLowerCase() + ctx.getParent().getParent().getChild(2).getText().toLowerCase());
+                        }
+                        else {
+                            this.codeBuilder.append(ctx.getChild(0).getText().toLowerCase() + " " + this.logicOperator + " " + ctx.getParent().getParent().getChild(2).getText().toLowerCase());
+                        }
+                    }
+                }
             }
             else if (this.isExpresion) {
             }
@@ -293,38 +321,12 @@ public class Translator extends LPP_grammarBaseListener{
     @Override public void enterCondicional(LPP_grammarParser.CondicionalContext ctx) {
         this.isCondition = true;
         this.setIndentationLevelUp();
-        String logicOperator = "";
-
-
-        int length = ctx.getChild(1).getChildCount();
-        for(int i= 0; i<length;i++){
-            if(i%2!=0){
-                if(ctx.getChild(1).getChild(i).getText().equalsIgnoreCase("o")){
-                    logicOperator = "or" ;
-                }
-                else if(ctx.getChild(1).getChild(i).getText().equalsIgnoreCase("y")){
-                    logicOperator = "and" ;
-                }
-            }
-        }
 
         if(ctx.getChild(3).getText().contains("sino") || ctx.getChild(3).getText().equals("null")){
 
         }
         else{
             this.codeBuilder.append("if ");
-            if (ctx.getChild(1).getChild(1).getText().equals("=")) {
-                this.codeBuilder.append(ctx.getChild(1).getChild(0).getText().toLowerCase()+" == "+ctx.getChild(1).getChild(2).getText().toLowerCase() + "\n");
-            }
-            else if(ctx.getChild(1).getChild(1).getText().equals("<>")){
-                this.codeBuilder.append(ctx.getChild(1).getChild(0).getText().toLowerCase()+" != "+ctx.getChild(1).getChild(2).getText().toLowerCase() + "\n");
-            }
-            else if (ctx.getChild(1).getChild(0).getText().equalsIgnoreCase("no")) {
-                this.codeBuilder.append("not " + ctx.getChild(1).getChild(1).getText().toLowerCase());
-            }
-            else {
-                this.codeBuilder.append(ctx.getChild(1).getChild(0).getText().toLowerCase() + logicOperator + ctx.getChild(1).getChild(2).getText().toLowerCase() + ":\n");
-            }
         }
     }
 

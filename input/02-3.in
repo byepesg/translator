@@ -22,7 +22,11 @@ inicio
           sino
              coef <- coef*(i-j+1)/j
           fin si
-      
+
+          si no (j = 1) entonces
+             coef <- 2
+          fin si
+
           escriba coef
           escriba "   "
       
