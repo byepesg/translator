@@ -14,6 +14,8 @@ public class Translator extends LPP_grammarBaseListener{
     private boolean isFunction = false;
     private boolean isAsign = false;
     private boolean isVariable = false;
+    private boolean isCondition = false;
+    private boolean isExpresion = false;
 
     private boolean isList = false;
     //params for special cases
@@ -71,11 +73,15 @@ public class Translator extends LPP_grammarBaseListener{
     }
 
     @Override public void enterExpresion(LPP_grammarParser.ExpresionContext ctx) {
+        this.isExpresion = true;
         if(ctx.getChildCount() == 1){
 
         }
-        else if(ctx.getChildCount() == 3){
-            this.codeBuilder.append(ctx.getChild(0).getText().toLowerCase()+ctx.getChild(1).toString()+ctx.getChild(2).getText().toLowerCase()+"\n");
+        else if(ctx.getChildCount() == 3 && !this.isLoop){
+            this.codeBuilder.append(ctx.getChild(0).getText().toLowerCase()+ctx.getChild(1).getText()+ctx.getChild(2).getText().toLowerCase()+"\n");
+        }
+        else if(ctx.getChildCount() == 3 && this.isCondition){
+            this.codeBuilder.append(ctx.getChild(0).getText().toLowerCase()+ctx.getChild(1).getText()+ctx.getChild(2).getText().toLowerCase() + "\n");
         }
     }
 
@@ -87,6 +93,7 @@ public class Translator extends LPP_grammarBaseListener{
     }
 
     @Override public void exitExpresion(LPP_grammarParser.ExpresionContext ctx) {
+        this.isExpresion = false;
         if (this.isList){
             this.codeBuilder.append(", ");
         }
@@ -100,7 +107,7 @@ public class Translator extends LPP_grammarBaseListener{
         if (ctx.getParent().getParent().getParent().getChild(0).getText().equals("-")) {
             this.codeBuilder.append(ctx.getParent().getParent().getParent().getChild(0).getText()+ctx.getChild(0).getText().toLowerCase());
         }
-        else{
+        else if(!isLoop){
             this.codeBuilder.append(ctx.getChild(0).getText().toLowerCase());
         }
     }
@@ -109,7 +116,7 @@ public class Translator extends LPP_grammarBaseListener{
         if (ctx.getParent().getParent().getParent().getChild(0).getText().equals("-")) {
             this.codeBuilder.append(ctx.getParent().getParent().getParent().getChild(0).getText()+ctx.getChild(0).getText().toLowerCase());
         }
-        else{
+        else if(!isLoop){
             this.codeBuilder.append(ctx.getChild(0).getText().toLowerCase());
         }
     }
@@ -119,7 +126,10 @@ public class Translator extends LPP_grammarBaseListener{
     }
     @Override public void enterId(LPP_grammarParser.IdContext ctx) {
         if (this.parametros == 1) {
-            if(this.isAsign) {
+            if(this.isAsign && !this.isLoop) {
+                this.codeBuilder.append(ctx.getChild(0).getText().toLowerCase() + " = ");
+            }
+            else if (this.isAsign && this.isCondition) {
                 this.codeBuilder.append(ctx.getChild(0).getText().toLowerCase() + " = ");
             }
             else if (this.isVariable) {
@@ -131,13 +141,23 @@ public class Translator extends LPP_grammarBaseListener{
             else if (this.isFunction){
                 this.isFunction = false;
             }
+            else if (this.isLoop) {
+
+            }
+            else if (this.isExpresion) {
+            }
             else{
                 this.codeBuilder.append(ctx.getChild(0).getText().toLowerCase());
             }
         }
         else {
-            if(this.isAsign) {
+            if(this.isAsign && !this.isLoop) {
                 this.codeBuilder.append(ctx.getChild(0).getText().toLowerCase() + " = ");
+                this.isAsign = false;
+            }
+            else if (this.isAsign && this.isCondition) {
+                this.codeBuilder.append(ctx.getChild(0).getText().toLowerCase() + " = ");
+                this.isAsign = false;
             }
             else if (this.isVariable) {
                 this.codeBuilder.append(ctx.getChild(0).getText().toLowerCase() + " = 0\n");
@@ -145,6 +165,10 @@ public class Translator extends LPP_grammarBaseListener{
             else if(this.isParametro) {
                 codeBuilder.append(ctx.getChild(0).getText().toLowerCase() + ", ");
                 this.parametros -= 2;
+            }
+            else if (this.isLoop) {
+            }
+            else if (this.isExpresion) {
             }
             else{
                 this.codeBuilder.append(ctx.getChild(0).getText().toLowerCase());
@@ -164,40 +188,29 @@ public class Translator extends LPP_grammarBaseListener{
     }
     @Override public void enterCiclos(LPP_grammarParser.CiclosContext ctx) {
         this.isLoop = true;
-
-        if (getIndentationLevel() ==0){
-            this.applyIndentation();
-            this.setIndentationLevelUp();
-        }
-        else{
-
-            this.applyIndentation();
-            this.setIndentationLevelUp();
-        }
+        this.setIndentationLevelUp();
 
         if (ctx.getChild(0).getText().equals("para")) {
             StringBuilder var10000 = this.codeBuilder;
-            String var10001 = ctx.getChild(1).getChild(0).getText();
+            String var10001 = ctx.getChild(1).getChild(0).getText().toLowerCase();
             var10000.append("for " + var10001 + " in range(" +
                     ctx.getChild(1).getChild(2).getText() + "," + ctx.getChild(3).getText() +
-                    "):\n");
+                    "(+1)):\n");
         } else if (ctx.getChild(0).getText().equals("mientras")) {
             this.codeBuilder.append("mientras");
         } else if (ctx.getChild(0).getText().equals("repita")) {
             this.codeBuilder.append("repita");
         }
-
     }
 
     @Override public void exitCiclos(LPP_grammarParser.CiclosContext ctx) {
 
-        this.indentationLevel -= 1;
-        isLoop = false;
+        this.setIndentationLevelDown();
+        this.isLoop = false;
 
     }
 
     @Override public void enterEscribir(LPP_grammarParser.EscribirContext ctx) {
-        this.applyIndentation();
         this.codeBuilder.append("print(");
     }
 
@@ -207,7 +220,7 @@ public class Translator extends LPP_grammarBaseListener{
 
 
     @Override public void enterFuncion(LPP_grammarParser.FuncionContext ctx) {
-        this.indentationLevel += 1;
+        this.setIndentationLevelUp();
         this.isFunction = true;
         if (ctx.getChild(2).toString().equals("(")) {
             this.codeBuilder.append("def " + ctx.getChild(1).getText().toLowerCase());
@@ -218,7 +231,7 @@ public class Translator extends LPP_grammarBaseListener{
     }
 
     @Override public void exitFuncion(LPP_grammarParser.FuncionContext ctx) {
-        this.indentationLevel -= 1;
+        this.setIndentationLevelDown();
         this.isFunction = false;
         codeBuilder.append("\n");
     }
@@ -278,18 +291,18 @@ public class Translator extends LPP_grammarBaseListener{
         return this.indentationLevel;
     }
     @Override public void enterCondicional(LPP_grammarParser.CondicionalContext ctx) {
-        setIndentationLevelUp();
-        applyIndentation();
+        this.isCondition = true;
+        this.setIndentationLevelUp();
         String logicOperator = "";
 
 
         int length = ctx.getChild(1).getChildCount();
         for(int i= 0; i<length;i++){
             if(i%2!=0){
-                if(ctx.getChild(1).getChild(i).getText().equals("o")){
+                if(ctx.getChild(1).getChild(i).getText().equalsIgnoreCase("o")){
                     logicOperator = "or" ;
                 }
-                else if(ctx.getChild(i).equals("y")){
+                else if(ctx.getChild(1).getChild(i).getText().equalsIgnoreCase("y")){
                     logicOperator = "and" ;
                 }
             }
@@ -299,31 +312,35 @@ public class Translator extends LPP_grammarBaseListener{
 
         }
         else{
-            codeBuilder.append("if ");
-            codeBuilder.append(ctx.getChild(1).getChild(0).getText());
-            codeBuilder.append(logicOperator+ctx.getChild(1).getChild(2).getText());
-            codeBuilder.append(":\n");
-            setIndentationLevelUp();
-            applyIndentation();
-            codeBuilder.append(ctx.getChild(3).getText());
-            setIndentationLevelDown();
-            codeBuilder.append(":\n");
-            //System.out.println("if "+ctx.getChild(1).getChild(0).getText()+logicOperator+ctx.getChild(1).getChild(2).getText()+":");
+            this.codeBuilder.append("if ");
+            if (ctx.getChild(1).getChild(1).getText().equals("=")) {
+                this.codeBuilder.append(ctx.getChild(1).getChild(0).getText().toLowerCase()+" == "+ctx.getChild(1).getChild(2).getText().toLowerCase() + "\n");
+            }
+            else if(ctx.getChild(1).getChild(1).getText().equals("<>")){
+                this.codeBuilder.append(ctx.getChild(1).getChild(0).getText().toLowerCase()+" != "+ctx.getChild(1).getChild(2).getText().toLowerCase() + "\n");
+            }
+            else if (ctx.getChild(1).getChild(0).getText().equalsIgnoreCase("no")) {
+                this.codeBuilder.append("not " + ctx.getChild(1).getChild(1).getText().toLowerCase());
+            }
+            else {
+                this.codeBuilder.append(ctx.getChild(1).getChild(0).getText().toLowerCase() + logicOperator + ctx.getChild(1).getChild(2).getText().toLowerCase() + ":\n");
+            }
         }
-
-
     }
 
     @Override public void exitCondicional(LPP_grammarParser.CondicionalContext ctx) {
-        setIndentationLevelDown();
+        this.setIndentationLevelDown();
+        this.isCondition = false;
     }
     @Override public void enterSino(LPP_grammarParser.SinoContext ctx) {
-        applyIndentation();
+        this.setIndentationLevelDown();
+        this.applyIndentation();
         this.setIndentationLevelUp();
         if(ctx.getChildCount()==2){
-            codeBuilder.append("else:\n");
-            this.applyIndentation();
-            codeBuilder.append(ctx.getChild(1).getText()+"\n");
+            this.codeBuilder.append("else:\n");
+        }
+        else{
+            this.codeBuilder.append("else ");
         }
     }
 
@@ -338,7 +355,7 @@ public class Translator extends LPP_grammarBaseListener{
     }
 
     public void applyIndentation() {
-        if (this.getIndentationLevel() > 0) {
+        if (this.getIndentationLevel() >= 0) {
             for(int i = 0; i < this.getIndentationLevel(); ++i) {
                 this.codeBuilder.append("\t");
             }
