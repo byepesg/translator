@@ -6,10 +6,14 @@ import java.util.regex.Pattern;
 
 public class Translator extends LPP_grammarBaseListener{
     private final StringBuilder codeBuilder = new StringBuilder();
-    private int identationLevel = 0;
+    private int indentationLevel = 0;
 
     private int parametros = 0;
     private boolean isLoop = false;
+    private boolean isParametro = false;
+    private boolean isFunction = false;
+    private boolean isAsign = false;
+    private boolean isVariable = false;
 
     private boolean isList = false;
     //params for special cases
@@ -40,73 +44,38 @@ public class Translator extends LPP_grammarBaseListener{
     }
 
     @Override public void enterVariable(LPP_grammarParser.VariableContext ctx) {
-        this.applyIdentation();
-        if (ctx.listaIDs() != null) {
-            //int countIDs = false;
-            String varTmp = null;
-            int countIDs = ctx.getChild(1).getChildCount();
-
-            for(int i = 0; i < countIDs; ++i) {
-                if (i % 2 == 0) {
-                    String var10000 =
-                            ctx.getChild(1).getChild(i).getText().toLowerCase();
-                    varTmp = var10000 + " = 0\n";
-                    this.codeBuilder.append(varTmp);
-                }
-            }
-
-            this.code = varTmp;
+        this.applyIndentation();
+        this.isVariable = true;
+        if (ctx.getChildCount() != 1){
+            this.isList = true;
         }
-
+    }
+    @Override public void exitVariable(LPP_grammarParser.VariableContext ctx) {
+        this.isVariable = false;
+        this.isList = false;
     }
 
-
     @Override public void enterAccion(LPP_grammarParser.AccionContext ctx) {
-        this.applyIdentation();
+        this.applyIndentation();
     }
 
     @Override public void exitAccion(LPP_grammarParser.AccionContext ctx) { }
 
     @Override public void enterAsignacion(LPP_grammarParser.AsignacionContext ctx) {
-        if (!this.isLoop && !this.isLoop) {
-            StringBuilder var10000 = this.codeBuilder;
-            String var10001 = ctx.getChild(0).getText().toLowerCase();
-            var10000.append(var10001 + " = ");
-        }
+        this.isAsign = true;
     }
 
     @Override public void exitAsignacion(LPP_grammarParser.AsignacionContext ctx) {
         this.codeBuilder.append("\n");
+        this.isAsign = false;
     }
 
     @Override public void enterExpresion(LPP_grammarParser.ExpresionContext ctx) {
-        if(this.isList) {
-            if (ctx.getChild(0).getText().equals("(")) {
-                this.codeBuilder.append("( " + ctx.getChild(1).getText() + " ), ");
-            } else if (ctx.getChildCount() == 3) {
-                this.codeBuilder.append(ctx.getChild(0).getText().toLowerCase() + ctx.getChild(1).getText() + ctx.getChild(2).getText().toLowerCase()+", ");
-            }
-            if(ctx.ID() != null){
-                //this.codeBuilder.append(ctx.getChild(0).getText().toLowerCase()+", ");
-            }
+        if(ctx.getChildCount() == 1){
+
         }
-        else {
-            if (ctx.getChild(0).getText().equals("(")) {
-                this.codeBuilder.append("( " + ctx.getChild(1).getText() + " )");
-            } else if (ctx.getChildCount() == 3) {
-                this.codeBuilder.append(ctx.getChild(0).getText().toLowerCase() + ctx.getChild(1).getText() + ctx.getChild(2).getText().toLowerCase());
-            }
-            if(ctx.ID() != null){
-                //this.codeBuilder.append(ctx.getChild(0).getText().toLowerCase());
-            }
-            /*else if (ctx.getChildCount() == 1){
-                String txt = ctx.getChild(0).getText();
-                String regex = "\"(.*?)\"|'(.)'";
-                Pattern pattern = Pattern.compile(regex);
-                Matcher matcher = pattern.matcher(txt);
-                if (!matcher.find()){
-                    //this.codeBuilder.append(ctx.getChild(0).getText().toLowerCase());
-             }*/
+        else if(ctx.getChildCount() == 3){
+            this.codeBuilder.append(ctx.getChild(0).getText().toLowerCase()+ctx.getChild(1).toString()+ctx.getChild(2).getText().toLowerCase()+"\n");
         }
     }
 
@@ -117,22 +86,86 @@ public class Translator extends LPP_grammarBaseListener{
         this.isList = false;
     }
 
-    @Override public void enterValores(LPP_grammarParser.ValoresContext ctx) {
+    @Override public void exitExpresion(LPP_grammarParser.ExpresionContext ctx) {
+        if (this.isList){
+            this.codeBuilder.append(", ");
+        }
+    }
+
+    @Override public void enterString(LPP_grammarParser.StringContext ctx) {
         this.codeBuilder.append(ctx.getChild(0).getText());
     }
 
-    @Override public void exitValores(LPP_grammarParser.ValoresContext ctx) {
+    @Override public void enterInteger(LPP_grammarParser.IntegerContext ctx) {
+        if (ctx.getParent().getParent().getParent().getChild(0).getText().equals("-")) {
+            this.codeBuilder.append(ctx.getParent().getParent().getParent().getChild(0).getText()+ctx.getChild(0).getText().toLowerCase());
+        }
+        else{
+            this.codeBuilder.append(ctx.getChild(0).getText().toLowerCase());
+        }
     }
 
-    @Override public void exitExpresion(LPP_grammarParser.ExpresionContext ctx) { }
+    @Override public void enterDouble(LPP_grammarParser.DoubleContext ctx) {
+        if (ctx.getParent().getParent().getParent().getChild(0).getText().equals("-")) {
+            this.codeBuilder.append(ctx.getParent().getParent().getParent().getChild(0).getText()+ctx.getChild(0).getText().toLowerCase());
+        }
+        else{
+            this.codeBuilder.append(ctx.getChild(0).getText().toLowerCase());
+        }
+    }
+
+    @Override public void enterChar(LPP_grammarParser.CharContext ctx) {
+        this.codeBuilder.append(ctx.getChild(0).getText());
+    }
+    @Override public void enterId(LPP_grammarParser.IdContext ctx) {
+        if (this.parametros == 1) {
+            if(this.isAsign) {
+                this.codeBuilder.append(ctx.getChild(0).getText().toLowerCase() + " = ");
+            }
+            else if (this.isVariable) {
+                this.codeBuilder.append(ctx.getChild(0).getText().toLowerCase() + " = 0\n");
+            }
+            else if (this.isParametro){
+                this.codeBuilder.append(ctx.getChild(0).getText().toLowerCase());
+            }
+            else if (this.isFunction){
+                this.isFunction = false;
+            }
+            else{
+                this.codeBuilder.append(ctx.getChild(0).getText().toLowerCase());
+            }
+        }
+        else {
+            if(this.isAsign) {
+                this.codeBuilder.append(ctx.getChild(0).getText().toLowerCase() + " = ");
+            }
+            else if (this.isVariable) {
+                this.codeBuilder.append(ctx.getChild(0).getText().toLowerCase() + " = 0\n");
+            }
+            else if(this.isParametro) {
+                codeBuilder.append(ctx.getChild(0).getText().toLowerCase() + ", ");
+                this.parametros -= 2;
+            }
+            else{
+                this.codeBuilder.append(ctx.getChild(0).getText().toLowerCase());
+            }
+        }
+    }
+
+    @Override public void exitId(LPP_grammarParser.IdContext ctx) {
+        if (this.isAsign){
+            this.isAsign = false;
+        }
+    }
+
 
     @Override public void enterListaIDs(LPP_grammarParser.ListaIDsContext ctx) {
-
+        this.parametros = ctx.getChildCount();
     }
     @Override public void enterCiclos(LPP_grammarParser.CiclosContext ctx) {
         this.isLoop = true;
-        this.setIdentationLevelUp();
-        this.applyIdentation();
+        this.setIndentationLevelUp();
+        this.applyIndentation();
         if (ctx.getChild(0).getText().equals("para")) {
             StringBuilder var10000 = this.codeBuilder;
             String var10001 = ctx.getChild(1).getChild(0).getText().toLowerCase();
@@ -149,13 +182,13 @@ public class Translator extends LPP_grammarBaseListener{
 
     @Override public void exitCiclos(LPP_grammarParser.CiclosContext ctx) {
 
-        this.identationLevel -= 1;
+        this.indentationLevel -= 1;
         isLoop = false;
 
     }
 
     @Override public void enterEscribir(LPP_grammarParser.EscribirContext ctx) {
-        this.applyIdentation();
+        this.applyIndentation();
         this.codeBuilder.append("print(");
     }
 
@@ -165,23 +198,35 @@ public class Translator extends LPP_grammarBaseListener{
 
 
     @Override public void enterFuncion(LPP_grammarParser.FuncionContext ctx) {
-        this.identationLevel += 1;
-        if(ctx.getChild(2).getText().equals("(")) {
-            codeBuilder.append("def " + ctx.getChild(1).toString().toLowerCase());
+        this.indentationLevel += 1;
+        this.isFunction = true;
+        if (ctx.getChild(2).toString().equals("(")) {
+            this.codeBuilder.append("def " + ctx.getChild(1).getText().toLowerCase());
         }
         else {
-            codeBuilder.append("def " + ctx.getChild(1).toString().toLowerCase()+" (): ");
+            this.codeBuilder.append("def " + ctx.getChild(1).getText().toLowerCase()+"():\n");
         }
     }
 
     @Override public void exitFuncion(LPP_grammarParser.FuncionContext ctx) {
-        this.identationLevel -= 1;
+        this.indentationLevel -= 1;
+        this.isFunction = false;
         codeBuilder.append("\n");
+    }
+
+    @Override public void enterRetorne(LPP_grammarParser.RetorneContext ctx) {
+        this.applyIndentation();
+        this.codeBuilder.append("return ");
+    }
+
+    @Override public void exitRetorne(LPP_grammarParser.RetorneContext ctx) {
+        this.codeBuilder.append("\n");
     }
 
     @Override public void enterParametros(LPP_grammarParser.ParametrosContext ctx) {
         this.parametros = ctx.getChildCount();
-        codeBuilder.append(" (");
+        this.codeBuilder.append(" (");
+        this.isParametro = true;
     }
 
     @Override public void exitParametros(LPP_grammarParser.ParametrosContext ctx) {
@@ -191,17 +236,20 @@ public class Translator extends LPP_grammarBaseListener{
         else {
             codeBuilder.append(")");
         }
+        this.parametros = 0;
+        this.isParametro = false;
+        this.isFunction = false;
     }
 
     @Override public void enterParametro(LPP_grammarParser.ParametroContext ctx) {
 
-        if (this.parametros == 1) {
+        /*if (this.parametros == 1) {
             codeBuilder.append(ctx.getChild(1).toString().toLowerCase());
         }
         else {
             codeBuilder.append(ctx.getChild(1).toString().toLowerCase() + ctx.getParent().getChild(1) + " ");
             this.parametros -= 2;
-        }
+        }*/
     }
 
     @Override public void enterTipo_dato(LPP_grammarParser.Tipo_datoContext ctx) {
@@ -210,19 +258,19 @@ public class Translator extends LPP_grammarBaseListener{
     @Override public void enterLlamar(LPP_grammarParser.LlamarContext ctx) {
 
         if(ctx.getChild(1).getText().equalsIgnoreCase("nueva_linea")){
-            codeBuilder.append("print(\""+"\\n\")"+"\n");
+            this.codeBuilder.append("print(\""+"\\n\")"+"\n");
         }
 
     }
 
     @Override public void exitLlamar(LPP_grammarParser.LlamarContext ctx) { }
     @Override public void exitTipo_dato(LPP_grammarParser.Tipo_datoContext ctx) { }
-    public int getIdentationLevel() {
-        return this.identationLevel;
+    public int getIndentationLevel() {
+        return this.indentationLevel;
     }
     @Override public void enterCondicional(LPP_grammarParser.CondicionalContext ctx) {
-        setIdentationLevelUp();
-        applyIdentation();
+        setIndentationLevelUp();
+        applyIndentation();
         System.out.println("if "+ctx.getChild(1).getText()+":");
 
 
@@ -230,18 +278,18 @@ public class Translator extends LPP_grammarBaseListener{
     }
 
     @Override public void exitCondicional(LPP_grammarParser.CondicionalContext ctx) {
-        setIdentationLevelDown();
+        setIndentationLevelDown();
     }
-    public void setIdentationLevelUp() {
-        ++this.identationLevel;
+    public void setIndentationLevelUp() {
+        ++this.indentationLevel;
     }
-    public void setIdentationLevelDown() {
-        --this.identationLevel;
+    public void setIndentationLevelDown() {
+        --this.indentationLevel;
     }
 
-    public void applyIdentation() {
-        if (this.getIdentationLevel() > 0) {
-            for(int i = 0; i < this.getIdentationLevel(); ++i) {
+    public void applyIndentation() {
+        if (this.getIndentationLevel() > 0) {
+            for(int i = 0; i < this.getIndentationLevel(); ++i) {
                 this.codeBuilder.append("\t");
             }
         }
@@ -253,4 +301,3 @@ public class Translator extends LPP_grammarBaseListener{
     }
 
 }
-

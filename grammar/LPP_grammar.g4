@@ -2,21 +2,21 @@ grammar LPP_grammar;
 
 programa: registro* variable* rutina estructura;
 
-registro: REGISTRO ID variable* FIN REGISTRO;
+registro: REGISTRO id variable* FIN REGISTRO;
 
 rutina: (procedimiento | funcion)*;
 
-procedimiento: PROCEDIMIENTO ID ( '(' parametros ')' )? variable* INICIO accion* FIN;
+procedimiento: PROCEDIMIENTO id ( '(' parametros ')' )? variable* INICIO accion* FIN;
 
-funcion: FUNCION ID ( '(' parametros ')' )? ':' tipo_dato variable* INICIO accion* (retorne)? FIN;
+funcion: FUNCION id ( '(' parametros ')' )? ':' tipo_dato variable* INICIO accion* (retorne)? FIN;
 retorne: RETORNE expresion;
 
 parametros: parametro (',' parametro)*;
-parametro: VAR? tipo_dato ID;
+parametro: VAR? tipo_dato id;
 
 variable: tipo_dato listaIDs;
-tipo_dato: ENTERO | REAL | BOOLEANO | CARACTER | CADENA ( '[' INTEGER ']' )? | ARREGLO '[' listaEnteros ']' DE tipo_dato | ID;
-listaIDs: ID ( ',' ID )*;
+tipo_dato: ENTERO | REAL | BOOLEANO | CARACTER | CADENA ( '[' INTEGER ']' )? | ARREGLO '[' listaEnteros ']' DE tipo_dato | id;
+listaIDs: id ( ',' id )*;
 listaEnteros: INTEGER ( ',' INTEGER )*;
 
 estructura: INICIO accion+ FIN EOF;
@@ -34,7 +34,7 @@ escribir: ESCRIBA listaExpr;
 //leer: LEA ID asignacion_auxiliar (',' ID)*;
 leer: LEA expresion;
 
-llamar: LLAMAR NUEVA_LINEA | LLAMAR ID ( '(' listaExpr? ')' )?;
+llamar: LLAMAR NUEVA_LINEA | LLAMAR id ( '(' listaExpr? ')' )?;
 
 condicional: SI expresion ENTONCES accion* sino? FIN SI;
 sino: SINO condicional | SINO accion*;
@@ -46,9 +46,9 @@ default: SINO ':'accion*;
 ciclos: MIENTRAS expresion HAGA accion* FIN MIENTRAS | REPITA accion* HASTA expresion | PARA asignacion HASTA expresion HAGA accion* FIN PARA;
 
 valores: integer | double | char | string | boolean;
-expresion: '(' expresion ')' | valores | ID | expresion '.' ID | expresion '[' listaExpr ']' | ID '(' listaExpr? ')' | '-' expresion | NO expresion | <assoc=right> expresion '^' expresion | expresion ( '*' | '/' | DIV | MOD ) expresion | expresion ( '+' | '-' ) expresion | expresion ( '=' | '<>' | '<=' | '>=' | '<' | '>' ) expresion | expresion OP_Y expresion | expresion OP_O expresion;
+expresion: '(' expresion ')' | valores | id | expresion '.' id | expresion '[' listaExpr ']' | id '(' listaExpr? ')' | '-' expresion | NO expresion | <assoc=right> expresion '^' expresion | expresion ( '*' | '/' | DIV | MOD ) expresion | expresion ( '+' | '-' ) expresion | expresion ( '=' | '<>' | '<=' | '>=' | '<' | '>' ) expresion | expresion OP_Y expresion | expresion OP_O expresion;
 
-
+id: ID;
 integer: INTEGER;
 double: DOUBLE;
 char: CHAR;
