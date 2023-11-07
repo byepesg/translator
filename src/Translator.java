@@ -95,7 +95,17 @@ public class Translator extends LPP_grammarBaseListener{
                 }
             }
             catch (NullPointerException e){
-                //this.logicOperator = "";
+                if (ctx.getChild(2).getChild(1).getChild(1).getText().equals("=")) {
+                    this.logicOperator = "==";
+                } else if (ctx.getChild(2).getChild(1).getChild(1).getText().equals("<>")) {
+                    this.logicOperator = "!=";
+                } else if (ctx.getChild(2).getChild(1).getChild(1).getText().equals("o")) {
+                    this.logicOperator = "or";
+                } else if (ctx.getChild(2).getChild(1).getChild(1).getText().equals("y")) {
+                    this.logicOperator = "and";
+                } else {
+                    this.logicOperator = ctx.getChild(2).getChild(1).getChild(1).getText();
+                }
             }
         }
         else if (ctx.getChildCount() == 2 && this.isCondition && ctx.getChild(0).getText().equalsIgnoreCase("no")) {

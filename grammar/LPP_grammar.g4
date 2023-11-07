@@ -153,5 +153,5 @@ ID : [a-zA-Z$_] [a-zA-Z0-9$_]* ;
 
 // NUEVA LINEA, ESPACIO BLANCO (WHITESPACE) Y COMENTARIOS
 WS : [ \t\r\n]+ -> skip ;
-COMENTARIO : '/' .? '*/' -> skip;
+COMENTARIO : '/*' .*? '*/' -> skip;
 COMENTARIO_LINEA : '//' ~[\r\n]* -> skip;

@@ -37,7 +37,7 @@ public class Main {
         // Create a generic parse tree walker that can trigger callbacks
          ParseTreeWalker walker = new ParseTreeWalker();
          // Walk the tree created during the parse, trigger callbacks
-        Translator obj = new Translator();
+        Traductor obj = new Traductor();
         walker.walk(obj, tree);
         //System.out.println("Holli"); // print a \n after translation
 
