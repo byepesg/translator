@@ -1,4 +1,4 @@
-// Generated from C:/Users/Asus/Desktop/UNAL/SEMESTRE11/Lenguajes_programacion/TRADUCTOR/translator/grammar/LPP_grammar.g4 by ANTLR 4.13.1
+// Generated from C:/Users/sebastian/IdeaProjects/translator/grammar/LPP_grammar.g4 by ANTLR 4.13.1
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.Token;

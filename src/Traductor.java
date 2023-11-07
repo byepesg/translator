@@ -3,6 +3,7 @@ public class Traductor extends LPP_grammarBaseListener{
     private final StringBuilder codeBuilder = new StringBuilder();
     private int indentationLevel = 0;
     private boolean isAsign = false;
+    private boolean isExpresionAsignacion = false;
     private boolean isPrint = false;
     private boolean isRead = false;
     private boolean isCall = false;
@@ -95,9 +96,25 @@ public class Traductor extends LPP_grammarBaseListener{
     }
     @Override public void enterAsignacion(LPP_grammarParser.AsignacionContext ctx) {
         this.isAsign = true;
+        if(!this.isCiclos) {
+            this.codeBuilder.append(ctx.getChild(0).getText().toLowerCase());
+            this.codeBuilder.append(" = ");
+            if(ctx.getChild(2).getChildCount() == 1){
+                this.codeBuilder.append(ctx.getChild(2).getText().toLowerCase());
+                this.codeBuilder.append("\n");
+                this.isExpresionAsignacion = false;
+            }
+            else{
+                this.isExpresionAsignacion = true;
+            }
+        }
+        else{
+            this.isCiclos = false;
+        }
     }
     @Override public void exitAsignacion(LPP_grammarParser.AsignacionContext ctx) {
         this.isAsign = false;
+        this.isExpresionAsignacion = false;
     }
     @Override public void enterEscribir(LPP_grammarParser.EscribirContext ctx) {
         this.isPrint = true;
@@ -105,7 +122,155 @@ public class Traductor extends LPP_grammarBaseListener{
     }
     @Override public void exitEscribir(LPP_grammarParser.EscribirContext ctx) {
         this.isPrint = false;
-        this.codeBuilder.append("print(");
+        this.codeBuilder.append(", end=' ')\n");
+    }
+    @Override public void enterLeer(LPP_grammarParser.LeerContext ctx) {
+        this.isRead = true;
+    }
+    @Override public void exitLeer(LPP_grammarParser.LeerContext ctx) {
+        this.isRead = false;
+    }
+    @Override public void enterLlamar(LPP_grammarParser.LlamarContext ctx) {
+        this.isCall = true;
+    }
+    @Override public void exitLlamar(LPP_grammarParser.LlamarContext ctx) {
+        this.isCall = false;
+    }
+    @Override public void enterCondicional(LPP_grammarParser.CondicionalContext ctx) {
+        this.isCondicion = true;
+        this.setIndentationLevelUp();
+        this.codeBuilder.append("if ");
+
+    }
+    @Override public void exitCondicional(LPP_grammarParser.CondicionalContext ctx) {
+        this.isCondicion = false;
+        this.setIndentationLevelDown();
+    }
+    @Override public void enterSino(LPP_grammarParser.SinoContext ctx) { }
+    @Override public void exitSino(LPP_grammarParser.SinoContext ctx) { }
+    @Override public void enterCasos(LPP_grammarParser.CasosContext ctx) {
+        this.isCasos = true;
+    }
+    @Override public void exitCasos(LPP_grammarParser.CasosContext ctx) {
+        this.isCasos = false;
+    }
+    @Override public void enterCiclos(LPP_grammarParser.CiclosContext ctx) {
+        this.isCiclos = true;
+        this.setIndentationLevelUp();
+        if (ctx.getChild(0).getText().equalsIgnoreCase("para")){
+            this.codeBuilder.append("for ");
+            this.codeBuilder.append(ctx.getChild(1).getChild(0).getText().toLowerCase());
+            this.codeBuilder.append(" in range(");
+            this.codeBuilder.append(ctx.getChild(1).getChild(2).getText());
+            this.codeBuilder.append(", ");
+            this.codeBuilder.append(ctx.getChild(3).getText().toLowerCase());
+            this.codeBuilder.append("(+1)):\n");
+        }
+        else if(ctx.getChild(0).getText().equalsIgnoreCase("repita")){
+
+        }
+        else if (ctx.getChild(0).getText().equalsIgnoreCase("mientras")) {
+
+        }
+    }
+    @Override public void exitCiclos(LPP_grammarParser.CiclosContext ctx) {
+        this.isCiclos = false;
+        this.setIndentationLevelDown();
+    }
+    @Override public void enterExpresion(LPP_grammarParser.ExpresionContext ctx) {
+        if(this.isExpresionAsignacion){
+            if (ctx.getChildCount() == 3) {
+                this.codeBuilder.append(ctx.getChild(0).getText().toLowerCase());
+                this.codeBuilder.append(ctx.getChild(1).getText());
+                this.codeBuilder.append(ctx.getChild(2).getText().toLowerCase());
+                this.codeBuilder.append("\n");
+                this.isExpresionAsignacion = false;
+            }
+            else if (ctx.getChildCount() == 2){
+                if (ctx.getChild(0).getText().equals("-")) {
+                    this.codeBuilder.append(ctx.getChild(0).getText());
+                    this.codeBuilder.append(ctx.getChild(0).getText().toLowerCase());
+                    this.codeBuilder.append("\n");
+                    this.isExpresionAsignacion = false;
+                }
+                else if(ctx.getChild(0).getText().equalsIgnoreCase("no")){
+                    this.codeBuilder.append("not ");
+                    this.codeBuilder.append(ctx.getChild(0).getText().toLowerCase());
+                    this.codeBuilder.append("\n");
+                    this.isExpresionAsignacion = false;
+                }
+            }
+        }
+        else if(this.isCondicion){
+            if(ctx.getChildCount() == 1){
+                this.codeBuilder.append(ctx.getChild(0).getText().toLowerCase());
+            }
+            else if(ctx.getChildCount() == 2){
+                if (ctx.getChild(0).getText().equals("-")) {
+                    this.codeBuilder.append(ctx.getChild(0).getText());
+                    this.codeBuilder.append(ctx.getChild(0).getText().toLowerCase());
+                }
+                else if(ctx.getChild(0).getText().equalsIgnoreCase("no")){
+                    this.codeBuilder.append("not ");
+                    this.codeBuilder.append(ctx.getChild(0).getText().toLowerCase());
+                }
+            }
+            else if(ctx.getChildCount() == 3){
+                if (ctx.getChild(1).getText().equals("=")) {
+                    this.codeBuilder.append(ctx.getChild(0).getText().toLowerCase());
+                    this.codeBuilder.append(" == ");
+                    this.codeBuilder.append(ctx.getChild(2).getText().toLowerCase());
+                } else if (ctx.getChild(1).getText().equals("<>")) {
+                    this.codeBuilder.append(ctx.getChild(0).getText().toLowerCase());
+                    this.codeBuilder.append(" != ");
+                    this.codeBuilder.append(ctx.getChild(2).getText().toLowerCase());
+                } else if (ctx.getChild(1).getText().equals("o")) {
+                    this.codeBuilder.append(ctx.getChild(0).getText().toLowerCase());
+                    this.codeBuilder.append(" or ");
+                    this.codeBuilder.append(ctx.getChild(2).getText().toLowerCase());
+                } else if (ctx.getChild(1).getText().equals("y")) {
+                    this.codeBuilder.append(ctx.getChild(0).getText().toLowerCase());
+                    this.codeBuilder.append(" and ");
+                    this.codeBuilder.append(ctx.getChild(2).getText().toLowerCase());
+                } else {
+                    this.codeBuilder.append(ctx.getChild(0).getText().toLowerCase());
+                    this.codeBuilder.append(ctx.getChild(1).getText());
+                    this.codeBuilder.append(ctx.getChild(2).getText().toLowerCase());
+                }
+            }
+        }
+    }
+    @Override public void exitExpresion(LPP_grammarParser.ExpresionContext ctx) { }
+    @Override public void enterListaExpr(LPP_grammarParser.ListaExprContext ctx) {
+        //this.codeBuilder.append(ctx.getChild(0).getText());
+        if(this.isPrint){
+            if(ctx.getChildCount() == 1){
+                if (ctx.getChild(0).getText().contains("\"") || ctx.getChild(0).getText().contains("'")) {
+                    this.codeBuilder.append(ctx.getChild(0).getText());
+                }
+                else{
+                    this.codeBuilder.append(ctx.getChild(0).getText().toLowerCase());
+                }
+            }
+            else {
+                for (int i = 0; i < ctx.getChildCount()-2; i=i+2) {
+                    if (ctx.getChild(0).getText().contains("\"") || ctx.getChild(0).getText().contains("'")) {
+                        this.codeBuilder.append(ctx.getChild(i).getText());
+                        this.codeBuilder.append(", ");
+                    }
+                    else{
+                        this.codeBuilder.append(ctx.getChild(i).getText().toLowerCase());
+                        this.codeBuilder.append(", ");
+                    }
+                }
+                if (ctx.getChild(ctx.getChildCount() - 1).getText().contains("\"") || ctx.getChild(ctx.getChildCount() - 1).getText().contains("'")) {
+                    this.codeBuilder.append(ctx.getChild(ctx.getChildCount() - 1).getText());
+                }
+                else {
+                    this.codeBuilder.append(ctx.getChild(ctx.getChildCount() - 1).getText().toLowerCase());
+                }
+            }
+        }
     }
     public void setIndentationLevelUp() {
         ++this.indentationLevel;
