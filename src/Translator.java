@@ -1,6 +1,4 @@
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /** Convert short array inits like {1,2,3} to "\u0001\u0002\u0003" */
 
@@ -82,22 +80,29 @@ public class Translator extends LPP_grammarBaseListener{
         else if(ctx.getChildCount() == 3 && !this.isLoop){
             this.codeBuilder.append(ctx.getChild(0).getText().toLowerCase()+ctx.getChild(1).getText()+ctx.getChild(2).getText().toLowerCase()+"\n");
         }
-        else if(ctx.getChildCount() == 3 && this.isCondition){
-            if (ctx.getChild(1).getText().equals("=")) {
-                this.logicOperator = " == ";
+        else if(ctx.getChildCount() == 3 && this.isCondition && this.logicOperator.isEmpty()){
+            try {
+                if (ctx.getChild(0).getChild(1).getChild(1).getText().equals("=")) {
+                    this.logicOperator = "==";
+                } else if (ctx.getChild(0).getChild(1).getChild(1).getText().equals("<>")) {
+                    this.logicOperator = "!=";
+                } else if (ctx.getChild(0).getChild(1).getChild(1).getText().equals("o")) {
+                    this.logicOperator = "or";
+                } else if (ctx.getChild(0).getChild(1).getChild(1).getText().equals("y")) {
+                    this.logicOperator = "and";
+                } else {
+                    this.logicOperator = ctx.getChild(0).getChild(1).getChild(1).getText();
+                }
             }
-            else if(ctx.getChild(1).getText().equals("<>")){
-                this.logicOperator = "!=";
-            }
-            else {
-                this.logicOperator = ctx.getChild(1).getText();
+            catch (NullPointerException e){
+                //this.logicOperator = "";
             }
         }
         else if (ctx.getChildCount() == 2 && this.isCondition && ctx.getChild(0).getText().equalsIgnoreCase("no")) {
             this.isNegation = true;
             this.logicOperator = "not";
         }
-        this.codeBuilder.append( ctx.getChild(0).getText());
+        //this.codeBuilder.append( ctx.getChild(0).getText());
     }
 
     @Override public void enterListaExpr(LPP_grammarParser.ListaExprContext ctx) {
@@ -157,20 +162,22 @@ public class Translator extends LPP_grammarBaseListener{
             else if (this.isFunction){
                 this.isFunction = false;
             }
-            else if (this.isLoop) {
-
-            }
             else if (this.isCondition) {
                 if (this.isExpresion) {
                     if (!this.logicOperator.isEmpty()) {
                         if (this.isNegation) {
                             this.codeBuilder.append(this.logicOperator + " " + ctx.getChild(0).getText().toLowerCase() + ctx.getParent().getParent().getChild(2).getText().toLowerCase());
+                            this.logicOperator = "";
                         }
                         else {
                             this.codeBuilder.append(ctx.getChild(0).getText().toLowerCase() + " " + this.logicOperator + " " + ctx.getParent().getParent().getChild(2).getText().toLowerCase());
+                            this.logicOperator = "";
                         }
                     }
                 }
+            }
+            else if (this.isLoop) {
+
             }
             else if (this.isExpresion) {
             }
@@ -193,6 +200,20 @@ public class Translator extends LPP_grammarBaseListener{
             else if(this.isParametro) {
                 codeBuilder.append(ctx.getChild(0).getText().toLowerCase() + ", ");
                 this.parametros -= 2;
+            }
+            else if (this.isCondition) {
+                if (this.isExpresion) {
+                    if (!this.logicOperator.isEmpty()) {
+                        if (this.isNegation) {
+                            this.codeBuilder.append(this.logicOperator + " " + ctx.getChild(0).getText().toLowerCase() + ctx.getParent().getParent().getChild(2).getText().toLowerCase());
+                            this.logicOperator = "";
+                        }
+                        else {
+                            this.codeBuilder.append(ctx.getChild(0).getText().toLowerCase() + " " + this.logicOperator + " " + ctx.getParent().getParent().getChild(2).getText().toLowerCase());
+                            this.logicOperator = "";
+                        }
+                    }
+                }
             }
             else if (this.isLoop) {
             }
