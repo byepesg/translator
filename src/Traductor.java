@@ -12,6 +12,7 @@ public class Traductor extends LPP_grammarBaseListener{
     private boolean isExpresionAsignacion = false;
     private boolean isPrint = false;
     private boolean isRead = false;
+    private boolean isRepita = false;
     private boolean isFuntion = false;
     private boolean isProcedimiento = false;
     private boolean isCall = false;
@@ -23,6 +24,7 @@ public class Traductor extends LPP_grammarBaseListener{
     private boolean stillArray = false;
     private String nombre = new String();
     private List<String> Arrays = new ArrayList<>();
+    private List<String> Funtions = new ArrayList<>();
     private List<String> AsArr = new ArrayList<>();
     public static String capitalizeFirstLetter(String input) {
         if (input == null || input.isEmpty()) {
@@ -172,10 +174,12 @@ public class Traductor extends LPP_grammarBaseListener{
             this.codeBuilder.append(ctx.getChild(1).getText().toLowerCase());
             this.codeBuilder.append(" (");
             this.isFuntion = true;
+            this.Funtions.add(ctx.getChild(1).getText().toLowerCase());
             //this.codeBuilder.append("):\n");
         }
         else {
             this.codeBuilder.append("def " + ctx.getChild(1).getText().toLowerCase()+"():\n");
+            this.Funtions.add(ctx.getChild(1).getText().toLowerCase());
         }
     }
     @Override public void exitFuncion(LPP_grammarParser.FuncionContext ctx) {
@@ -269,23 +273,47 @@ public class Traductor extends LPP_grammarBaseListener{
     }
     @Override public void enterAsignacion(LPP_grammarParser.AsignacionContext ctx) {
         this.isAsign = true;
-        if (ctx.getChild(0).getText().toLowerCase().contains("[")){
+        String n = ctx.getChild(2).getText().toLowerCase();
+        String r = "";
+        boolean b = false;
+        for(char c : n.toCharArray()){
+            if(c == '('){
+                break;
+            }
+            else {
+                r = r + c;
+            }
+        }
+        for (String s : this.Funtions){
+            if(s.equalsIgnoreCase(r)){
+                b=true;
+                break;
+            }
+        }
+        if(ctx.getChild(2).getChildCount() > 1 && b) {
+            if (ctx.getChild(2).getChild(1).getText().equals("(")) {
+                this.codeBuilder.append(ctx.getChild(0).getText().toLowerCase());
+                this.codeBuilder.append(" = ");
+                this.codeBuilder.append(ctx.getChild(2).getText().toLowerCase());
+                this.codeBuilder.append("\n");
+            }
+        }
+        else if (ctx.getChild(0).getText().toLowerCase().contains("[")) {
             String na = ctx.getChild(0).getText().toLowerCase();
             String patron = "[0-9]";
             String res = "";
             String res2 = "";
             Pattern pattern = Pattern.compile(patron);
-            for(char caracter : na.toCharArray()){
+            for (char caracter : na.toCharArray()) {
                 Matcher matcher = pattern.matcher(String.valueOf(caracter));
-                if (matcher.find()){
+                if (matcher.find()) {
                     res = res + caracter;
                 }
             }
-            for(char caracter : na.toCharArray()){
-                if (caracter == '['){
+            for (char caracter : na.toCharArray()) {
+                if (caracter == '[') {
                     break;
-                }
-                else{
+                } else {
                     res2 = res2 + caracter;
                 }
             }
@@ -293,14 +321,12 @@ public class Traductor extends LPP_grammarBaseListener{
             this.getString(res);
             this.codeBuilder.append(" = ");
             if (ctx.getChild(2).getText().equalsIgnoreCase("falso") || ctx.getChild(2).getText().equalsIgnoreCase("verdadero")) {
-            }
-            else {
+            } else {
                 this.codeBuilder.append(ctx.getChild(2).getText().toLowerCase());
                 this.codeBuilder.append("\n");
                 this.isExpresionAsignacion = false;
             }
-        }
-        else {
+        } else {
             if (!this.isCiclos) {
                 this.codeBuilder.append(ctx.getChild(0).getText().toLowerCase());
                 this.codeBuilder.append(" = ");
@@ -345,6 +371,9 @@ public class Traductor extends LPP_grammarBaseListener{
     }
     @Override public void enterLeer(LPP_grammarParser.LeerContext ctx) {
         this.isRead = true;
+        this.getExpresion(ctx.getChild(1).getText().toLowerCase());
+        this.codeBuilder.append(" = ");
+        this.codeBuilder.append("input()\n");
     }
     @Override public void exitLeer(LPP_grammarParser.LeerContext ctx) {
         this.isRead = false;
@@ -365,7 +394,7 @@ public class Traductor extends LPP_grammarBaseListener{
             this.codeBuilder.append("print(\""+"\\n\")"+"\n");
         }
         else if(ctx.getChild(openingPar).getText().equals("(") &&ctx.getChild(closingPar).getText().equals(")")){
-            codeBuilder.append(this.procedureList.get(indexVariable)+"()\n");
+            codeBuilder.append(this.procedureList.get(indexVariable).toLowerCase()+"()\n");
 
             //printProcedureElements();
             //System.out.println("Variable a buscar:"+capitalizeFirstLetter(ctx.getChild(1).getText().toLowerCase()));
@@ -383,14 +412,26 @@ public class Traductor extends LPP_grammarBaseListener{
         this.isCondicion = true;
         this.setIndentationLevelUp();
         this.codeBuilder.append("if ");
+        this.getExpresion(ctx.getChild(1).getText().toLowerCase());
+        this.codeBuilder.append(":\n");
 
     }
     @Override public void exitCondicional(LPP_grammarParser.CondicionalContext ctx) {
         this.isCondicion = false;
         this.setIndentationLevelDown();
     }
-    @Override public void enterSino(LPP_grammarParser.SinoContext ctx) { }
-    @Override public void exitSino(LPP_grammarParser.SinoContext ctx) { }
+    @Override public void enterSino(LPP_grammarParser.SinoContext ctx) {
+        this.setIndentationLevelDown();
+        this.applyIndentation();
+        this.setIndentationLevelUp();
+        this.codeBuilder.append("else");
+        if (ctx.getChild(1).getChild(0).getText().equalsIgnoreCase("si")){
+
+        }
+        else {
+            this.codeBuilder.append(":\n");
+        }
+    }
     @Override public void enterCasos(LPP_grammarParser.CasosContext ctx) {
         this.isCasos = true;
     }
@@ -411,9 +452,12 @@ public class Traductor extends LPP_grammarBaseListener{
         }
         else if(ctx.getChild(0).getText().equalsIgnoreCase("repita")){
 
+
         }
         else if (ctx.getChild(0).getText().equalsIgnoreCase("mientras")) {
             this.codeBuilder.append("while ");
+            this.getExpresion(ctx.getChild(1).getText().toLowerCase());
+            this.codeBuilder.append(":\n");
         }
     }
     @Override public void exitCiclos(LPP_grammarParser.CiclosContext ctx) {
@@ -457,6 +501,9 @@ public class Traductor extends LPP_grammarBaseListener{
                 else{
                     this.codeBuilder.append(ctx.getChild(0).getText().toLowerCase());
                 }
+            }
+            else if (ctx.getChildCount() == 3){
+                this.getExpresion(ctx.getText().toLowerCase());
             }
             else {
                 for (int i = 0; i < ctx.getChildCount()-2; i=i+2) {
@@ -510,9 +557,80 @@ public class Traductor extends LPP_grammarBaseListener{
         }
     }
     public void getExpresion(String p){
-        for(char c : p.toCharArray()){
-
+        String pa = "";
+        boolean dif = false;
+        boolean div = false;
+        boolean mod = false;
+        String md = "";
+        String dv = "";
+        for(char c : p.toLowerCase().toCharArray()){
+            if(dif){
+                if (c =='>'){
+                    pa = pa + "!=";
+                    dif = false;
+                }
+                else {
+                    pa = pa + "<" + c;
+                    dif = false;
+                }
+            }
+            else if (div){
+                if(dv.equalsIgnoreCase("di") && c == 'v'){
+                    pa = pa + "/";
+                    div = false;
+                }
+                else if(dv.equalsIgnoreCase("d") && c == 'i'){
+                    dv = dv + c;
+                }
+                else {
+                    pa = pa + dv + c;
+                    div = false;
+                }
+            }
+            else if(mod){
+                if(md.equalsIgnoreCase("mo") && c == 'd'){
+                    pa = pa + "%";
+                    mod = false;
+                }
+                else if(md.equalsIgnoreCase("m") && c == 'o'){
+                    md = md + c;
+                }
+                else {
+                    pa = pa + md + c;
+                    mod = false;
+                }
+            }
+            else if(c == '='){
+                pa = pa + " == ";
+            }
+            else if(c == '/'){
+                pa = pa + "//";
+            }
+            else if(c == 'o'){
+                pa = pa + " or ";
+            }
+            else if (c == 'y'){
+                pa = pa + "and";
+            }
+            else if (c == '<'){
+                dif = true;
+            }
+            else if(c == 'd'){
+                div = true;
+                dv = dv + c;
+            }
+            else if(c == 'm'){
+                mod = true;
+                md = md + c;
+            }
+            else if (c == '^'){
+                pa = pa + "**";
+            }
+            else{
+                pa = pa + c;
+            }
         }
+        this.codeBuilder.append(pa);
     }
     public String getCode() {
         //System.out.println(codeBuilder.toString());
