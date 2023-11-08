@@ -1,25 +1,137 @@
 import java.util.*;
 public class Traductor extends LPP_grammarBaseListener{
+
     private final StringBuilder codeBuilder = new StringBuilder();
     private int indentationLevel = 0;
     private boolean isAsign = false;
+    private boolean isObject = false;
+    private ArrayList<String> classesList = new ArrayList<>();
+    private ArrayList<String> procedureList = new ArrayList<>();
+    private ArrayList<String> procedureListTmp = new ArrayList<>();
     private boolean isExpresionAsignacion = false;
     private boolean isPrint = false;
     private boolean isRead = false;
     private boolean isCall = false;
     private boolean isCondicion = false;
+    private boolean isRegister = false;
     private boolean isCasos = false;
     private boolean isCiclos = false;
     private boolean isArray = false;
     private boolean stillArray = false;
     private List<String> Arrays = new ArrayList<>();
+    public static String capitalizeFirstLetter(String input) {
+        if (input == null || input.isEmpty()) {
+            return input; // Return the input string as is if it's null or empty.
+        }
 
+        char firstChar = Character.toUpperCase(input.charAt(0));
+        return firstChar + input.substring(1);
+    }
+    public boolean containsRegisterElement(String element) {
+        return classesList.contains(element);
+    }
+
+    public int indexRegisterElement(String element) {
+        if (containsRegisterElement(element)) {
+            return classesList.indexOf(element);
+        }
+        return -1; // Devolver -1 si el elemento no se encuentra
+    }
+    public void imprimirElementos() {
+        for (int i = 0; i < this.classesList.size(); i++) {
+            System.out.println("Elemento " + i + ": " + this.classesList.get(i));
+        }
+    }
+    public boolean containsProcedureElement(String element) {
+
+        return procedureList.contains(element);
+    }
+    public int indexProcedureElement(String element) {
+        if (containsProcedureElement(element)) {
+            return procedureList.indexOf(element);
+        }
+        return -1; // Devolver -1 si el elemento no se encuentra
+    }
+
+    public void printProcedureElements() {
+        for (int i = 0; i < this.procedureList.size(); i++) {
+            System.out.println("Elemento " + i + ": " + this.procedureList.get(i));
+        }
+    }
+
+    public void printProcedureTmpElements() {
+
+        for (int i = 0; i < this.procedureList.size(); i++) {
+            System.out.println("Elemento " + i + ": " + this.procedureList.get(i));
+        }
+    }
+
+
+
+
+    ///////////////////////////////////////////////////////////
     @Override public void enterPrograma(LPP_grammarParser.ProgramaContext ctx) {
         System.out.println("###This is the python translation");
         this.codeBuilder.append("import numpy as np\n\n");
     }
+    @Override public void enterRegistro(LPP_grammarParser.RegistroContext ctx) {
+        isRegister = true;
+        this.setIndentationLevelUp();
+        if(ctx.getChild(0).getText().equalsIgnoreCase("registro")){
+            this.codeBuilder.append("class ");
+            this.codeBuilder.append(capitalizeFirstLetter(ctx.getChild(1).getText().toLowerCase())+":\n");
+            this.classesList.add(capitalizeFirstLetter(ctx.getChild(1).getText().toLowerCase()));
+        }
+
+    }
+
+    @Override public void exitRegistro(LPP_grammarParser.RegistroContext ctx) {
+
+
+        this.setIndentationLevelDown();
+
+    }
+    @Override public void enterProcedimiento(LPP_grammarParser.ProcedimientoContext ctx) {
+
+        this.setIndentationLevelUp();
+
+        if(ctx.getChild(0).getText().equalsIgnoreCase("procedimiento")){
+            this.codeBuilder.append("def ");
+            this.codeBuilder.append(capitalizeFirstLetter(ctx.getChild(1).getText().toLowerCase())+"():\n");
+            this.procedureList.add(capitalizeFirstLetter(ctx.getChild(1).getText().toLowerCase()));
+
+        }
+    }
+
+    @Override public void exitProcedimiento(LPP_grammarParser.ProcedimientoContext ctx) {
+    this.setIndentationLevelDown();
+    }
     @Override public void enterVariable(LPP_grammarParser.VariableContext ctx) {
+        //When is needed assign class objects
+        //******************************************************************************************************
         this.applyIndentation();
+        boolean isRegisterVariable;
+        int indexVariable;
+        isRegisterVariable = this.containsRegisterElement(capitalizeFirstLetter(ctx.getChild(0).getText()));
+        indexVariable = this.indexRegisterElement(capitalizeFirstLetter(ctx.getChild(0).getText()));
+
+        if( isRegisterVariable) {
+            this.isObject = true;
+                if(this.isRegister){
+                    codeBuilder.append("def __init__(self):\n");
+                    setIndentationLevelUp();
+                    applyIndentation();
+                    codeBuilder.append("self.");
+                    codeBuilder.append(ctx.getChild(1).getText() + "=" + this.classesList.get(indexVariable) + "()\n");
+                    setIndentationLevelDown();
+                    this.isRegister= false;
+                }
+                else{
+                    codeBuilder.append(ctx.getChild(1).getText() + "=" + this.classesList.get(indexVariable) + "()\n");
+                }
+
+        }
+        //******************************************************************************************************
         if (ctx.getChild(0).getChildCount() != 1 && ctx.getChild(0).getChild(0).getText().equalsIgnoreCase("arreglo")) {
             this.isArray = true;
             for (int i = 0; i < ctx.getChild(1).getChildCount(); i++) {
@@ -29,18 +141,26 @@ public class Traductor extends LPP_grammarBaseListener{
             }
         }
         else{
-            for (int i = 0; i < ctx.getChild(1).getChildCount(); i++) {
-                if (!ctx.getChild(1).getChild(i).getText().equals(",")) {
-                    this.codeBuilder.append(ctx.getChild(1).getChild(i).getText().toLowerCase());
-                    this.codeBuilder.append(" = 0\n");
+            //When is needed to assign objects
+            if(this.isObject){
+
+            }
+            else {
+                for (int i = 0; i < ctx.getChild(1).getChildCount(); i++) {
+                    if (!ctx.getChild(1).getChild(i).getText().equals(",")) {
+                        this.codeBuilder.append(ctx.getChild(1).getChild(i).getText().toLowerCase());
+                        this.codeBuilder.append(" = 0\n");
+                    }
                 }
             }
         }
     }
     @Override public void exitVariable(LPP_grammarParser.VariableContext ctx) {
         this.isArray = false;
+        this.isObject = false;
     }
     @Override public void enterTipo_dato(LPP_grammarParser.Tipo_datoContext ctx) {
+
         if(this.isArray){
             if (ctx.getChildCount() > 1) {
                 if (ctx.getChild(5).getChild(0).getText().equalsIgnoreCase("arreglo")){
@@ -96,6 +216,7 @@ public class Traductor extends LPP_grammarBaseListener{
     }
     @Override public void enterAsignacion(LPP_grammarParser.AsignacionContext ctx) {
         this.isAsign = true;
+
         if(!this.isCiclos) {
             this.codeBuilder.append(ctx.getChild(0).getText().toLowerCase());
             this.codeBuilder.append(" = ");
@@ -132,6 +253,30 @@ public class Traductor extends LPP_grammarBaseListener{
     }
     @Override public void enterLlamar(LPP_grammarParser.LlamarContext ctx) {
         this.isCall = true;
+        int openingPar=(ctx.getChildCount()-2);
+        int closingPar=(ctx.getChildCount()-1);
+        boolean isProcedureVariable = false;
+        int indexVariable= 0;
+
+        isProcedureVariable = this.containsProcedureElement(capitalizeFirstLetter(ctx.getChild(1).getText().toLowerCase()));
+        indexVariable = this.indexProcedureElement(capitalizeFirstLetter(ctx.getChild(1).getText().toLowerCase()));
+
+
+
+        if(ctx.getChild(1).getText().equalsIgnoreCase("nueva_linea")){
+            this.codeBuilder.append("print(\""+"\\n\")"+"\n");
+        }
+        else if(ctx.getChild(openingPar).getText().equals("(") &&ctx.getChild(closingPar).getText().equals(")")){
+            codeBuilder.append(this.procedureList.get(indexVariable)+"()\n");
+
+            //printProcedureElements();
+            //System.out.println("Variable a buscar:"+capitalizeFirstLetter(ctx.getChild(1).getText().toLowerCase()));
+            //System.out.println("pv"+isProcedureVariable+"Index"+indexVariable);
+
+
+        }
+
+
     }
     @Override public void exitLlamar(LPP_grammarParser.LlamarContext ctx) {
         this.isCall = false;

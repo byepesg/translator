@@ -10,6 +10,7 @@ registro subject
    cadena[10] name
    entero credits
    calendar horario
+
 fin registro
 
 subject sub1
