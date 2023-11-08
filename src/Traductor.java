@@ -1,4 +1,5 @@
 import java.util.*;
+import java.util.regex.*;
 public class Traductor extends LPP_grammarBaseListener{
 
     private final StringBuilder codeBuilder = new StringBuilder();
@@ -11,6 +12,8 @@ public class Traductor extends LPP_grammarBaseListener{
     private boolean isExpresionAsignacion = false;
     private boolean isPrint = false;
     private boolean isRead = false;
+    private boolean isFuntion = false;
+    private boolean isProcedimiento = false;
     private boolean isCall = false;
     private boolean isCondicion = false;
     private boolean isRegister = false;
@@ -18,7 +21,9 @@ public class Traductor extends LPP_grammarBaseListener{
     private boolean isCiclos = false;
     private boolean isArray = false;
     private boolean stillArray = false;
+    private String nombre = new String();
     private List<String> Arrays = new ArrayList<>();
+    private List<String> AsArr = new ArrayList<>();
     public static String capitalizeFirstLetter(String input) {
         if (input == null || input.isEmpty()) {
             return input; // Return the input string as is if it's null or empty.
@@ -97,7 +102,7 @@ public class Traductor extends LPP_grammarBaseListener{
 
         if(ctx.getChild(0).getText().equalsIgnoreCase("procedimiento")){
             this.codeBuilder.append("def ");
-            this.codeBuilder.append(capitalizeFirstLetter(ctx.getChild(1).getText().toLowerCase())+"():\n");
+            this.codeBuilder.append(ctx.getChild(1).getText().toLowerCase()+"():\n");
             this.procedureList.add(capitalizeFirstLetter(ctx.getChild(1).getText().toLowerCase()));
 
         }
@@ -159,8 +164,50 @@ public class Traductor extends LPP_grammarBaseListener{
         this.isArray = false;
         this.isObject = false;
     }
-    @Override public void enterTipo_dato(LPP_grammarParser.Tipo_datoContext ctx) {
+    @Override public void enterFuncion(LPP_grammarParser.FuncionContext ctx) {
+        this.setIndentationLevelUp();
 
+        if (ctx.getChild(2).toString().equals("(")) {
+            this.codeBuilder.append("def ");
+            this.codeBuilder.append(ctx.getChild(1).getText().toLowerCase());
+            this.codeBuilder.append(" (");
+            this.isFuntion = true;
+            //this.codeBuilder.append("):\n");
+        }
+        else {
+            this.codeBuilder.append("def " + ctx.getChild(1).getText().toLowerCase()+"():\n");
+        }
+    }
+    @Override public void exitFuncion(LPP_grammarParser.FuncionContext ctx) {
+        this.setIndentationLevelDown();
+    }
+    @Override public void enterParametros(LPP_grammarParser.ParametrosContext ctx) {
+        if(this.isFuntion || this.isProcedimiento){
+            for (int i = 0; i < ctx.getChildCount()-2; i = i+2){
+                this.codeBuilder.append(ctx.getChild(i).getChild(1).getText().toLowerCase());
+                this.codeBuilder.append(", ");
+            }
+            this.codeBuilder.append(ctx.getChild(ctx.getChildCount()-1).getChild(1).getText().toLowerCase());
+            this.codeBuilder.append("):\n");
+        }
+    }
+    @Override public void exitParametros(LPP_grammarParser.ParametrosContext ctx) {
+        this.isFuntion = false;
+        this.isProcedimiento = false;
+    }
+    @Override public void enterRetorne(LPP_grammarParser.RetorneContext ctx) {
+        this.applyIndentation();
+        this.codeBuilder.append("return ");
+        if (ctx.getChild(1).getText().contains("\"") || ctx.getChild(1).getText().contains("'")) {
+            this.codeBuilder.append(ctx.getChild(1).getText());
+            this.codeBuilder.append("\n");
+        }
+        else{
+            this.codeBuilder.append(ctx.getChild(1).getText().toLowerCase());
+            this.codeBuilder.append("\n");
+        }
+    }
+    @Override public void enterTipo_dato(LPP_grammarParser.Tipo_datoContext ctx) {
         if(this.isArray){
             if (ctx.getChildCount() > 1) {
                 if (ctx.getChild(5).getChild(0).getText().equalsIgnoreCase("arreglo")){
@@ -170,42 +217,48 @@ public class Traductor extends LPP_grammarBaseListener{
                     this.stillArray = false;
                 }
                 try {
-                    this.codeBuilder.append(this.Arrays.get(0));
-                    this.codeBuilder.append(" = ");
-                    this.codeBuilder.append("np.array([");
+                    nombre = this.Arrays.get(0);
+                    this.codeBuilder.append(nombre);
+                    this.codeBuilder.append(" = np.full((");
                     if (!this.stillArray) {
-                        this.codeBuilder.append("np.zeros((");
                         for (int i = 0; i < ctx.getChild(2).getChildCount() - 2; i = i + 2) {
                             this.codeBuilder.append(ctx.getChild(2).getChild(i).getText());
                             this.codeBuilder.append(", ");
+                            this.AsArr.add(ctx.getChild(2).getChild(i).getText());
                         }
                         this.codeBuilder.append(ctx.getChild(2).getChild(ctx.getChild(2).getChildCount() - 1).getText());
-                        this.codeBuilder.append("))])\n");
+                        this.codeBuilder.append("), 0)\n");
                         this.isArray = false;
-                    } else {
-                        this.codeBuilder.append("np.zeros((");
+                        this.AsArr.add(ctx.getChild(2).getChild(ctx.getChild(2).getChildCount() - 1).getText());
+                    }
+                    else {
                         for (int i = 0; i < ctx.getChild(2).getChildCount() - 2; i = i + 2) {
                             this.codeBuilder.append(ctx.getChild(2).getChild(i).getText());
                             this.codeBuilder.append(", ");
+                            this.AsArr.add(ctx.getChild(2).getChild(i).getText());
                         }
                         this.codeBuilder.append(ctx.getChild(2).getChild(ctx.getChild(2).getChildCount() - 1).getText());
-                        this.codeBuilder.append(")), ");
+                        this.codeBuilder.append(", ");
+                        this.AsArr.add(ctx.getChild(2).getChild(ctx.getChild(2).getChildCount() - 1).getText());
                     }
                     this.Arrays.remove(0);
                 }
                 catch (IndexOutOfBoundsException e){
-                    this.codeBuilder.append("np.zeros((");
                     for (int i = 0; i < ctx.getChild(2).getChildCount() - 2; i = i + 2) {
                         this.codeBuilder.append(ctx.getChild(2).getChild(i).getText());
                         this.codeBuilder.append(", ");
+                        this.AsArr.add(ctx.getChild(2).getChild(i).getText());
                     }
                     if (!this.stillArray) {
                         this.codeBuilder.append(ctx.getChild(2).getChild(ctx.getChild(2).getChildCount() - 1).getText());
-                        this.codeBuilder.append("))])\n");
+                        this.codeBuilder.append("), 0)\n");
                         this.isArray = false;
-                    } else {
+                        this.AsArr.add(ctx.getChild(2).getChild(ctx.getChild(2).getChildCount() - 1).getText());
+                    }
+                    else {
                         this.codeBuilder.append(ctx.getChild(2).getChild(ctx.getChild(2).getChildCount() - 1).getText());
-                        this.codeBuilder.append(")), ");
+                        this.codeBuilder.append(", ");
+                        this.AsArr.add(ctx.getChild(2).getChild(ctx.getChild(2).getChildCount() - 1).getText());
                     }
                 }
             }
@@ -216,26 +269,71 @@ public class Traductor extends LPP_grammarBaseListener{
     }
     @Override public void enterAsignacion(LPP_grammarParser.AsignacionContext ctx) {
         this.isAsign = true;
-
-        if(!this.isCiclos) {
-            this.codeBuilder.append(ctx.getChild(0).getText().toLowerCase());
+        if (ctx.getChild(0).getText().toLowerCase().contains("[")){
+            String na = ctx.getChild(0).getText().toLowerCase();
+            String patron = "[0-9]";
+            String res = "";
+            String res2 = "";
+            Pattern pattern = Pattern.compile(patron);
+            for(char caracter : na.toCharArray()){
+                Matcher matcher = pattern.matcher(String.valueOf(caracter));
+                if (matcher.find()){
+                    res = res + caracter;
+                }
+            }
+            for(char caracter : na.toCharArray()){
+                if (caracter == '['){
+                    break;
+                }
+                else{
+                    res2 = res2 + caracter;
+                }
+            }
+            this.codeBuilder.append(res2);
+            this.getString(res);
             this.codeBuilder.append(" = ");
-            if(ctx.getChild(2).getChildCount() == 1){
+            if (ctx.getChild(2).getText().equalsIgnoreCase("falso") || ctx.getChild(2).getText().equalsIgnoreCase("verdadero")) {
+            }
+            else {
                 this.codeBuilder.append(ctx.getChild(2).getText().toLowerCase());
                 this.codeBuilder.append("\n");
                 this.isExpresionAsignacion = false;
             }
-            else{
-                this.isExpresionAsignacion = true;
-            }
         }
-        else{
-            this.isCiclos = false;
+        else {
+            if (!this.isCiclos) {
+                this.codeBuilder.append(ctx.getChild(0).getText().toLowerCase());
+                this.codeBuilder.append(" = ");
+                if (ctx.getChild(2).getChildCount() == 1) {
+                    if (ctx.getChild(2).getText().equalsIgnoreCase("falso") || ctx.getChild(2).getText().equalsIgnoreCase("verdadero")) {
+
+                    } else {
+                        this.codeBuilder.append(ctx.getChild(2).getText().toLowerCase());
+                        this.codeBuilder.append("\n");
+                        this.isExpresionAsignacion = false;
+                    }
+                } else {
+                    this.isExpresionAsignacion = true;
+                }
+            } else {
+                this.isCiclos = false;
+            }
         }
     }
     @Override public void exitAsignacion(LPP_grammarParser.AsignacionContext ctx) {
         this.isAsign = false;
         this.isExpresionAsignacion = false;
+        this.AsArr.clear();
+    }
+    @Override public void enterBoolean(LPP_grammarParser.BooleanContext ctx) {
+        if(ctx.getChild(0).getText().equalsIgnoreCase("falso")){
+            this.codeBuilder.append("False");
+            this.codeBuilder.append("\n");
+        }
+        else if(ctx.getChild(0).getText().equalsIgnoreCase("verdadero")){
+            this.codeBuilder.append("True");
+            this.codeBuilder.append("\n");
+        }
     }
     @Override public void enterEscribir(LPP_grammarParser.EscribirContext ctx) {
         this.isPrint = true;
@@ -315,7 +413,7 @@ public class Traductor extends LPP_grammarBaseListener{
 
         }
         else if (ctx.getChild(0).getText().equalsIgnoreCase("mientras")) {
-
+            this.codeBuilder.append("while ");
         }
     }
     @Override public void exitCiclos(LPP_grammarParser.CiclosContext ctx) {
@@ -334,60 +432,23 @@ public class Traductor extends LPP_grammarBaseListener{
             else if (ctx.getChildCount() == 2){
                 if (ctx.getChild(0).getText().equals("-")) {
                     this.codeBuilder.append(ctx.getChild(0).getText());
-                    this.codeBuilder.append(ctx.getChild(0).getText().toLowerCase());
+                    this.codeBuilder.append(ctx.getChild(1).getText().toLowerCase());
                     this.codeBuilder.append("\n");
                     this.isExpresionAsignacion = false;
                 }
                 else if(ctx.getChild(0).getText().equalsIgnoreCase("no")){
                     this.codeBuilder.append("not ");
-                    this.codeBuilder.append(ctx.getChild(0).getText().toLowerCase());
+                    this.codeBuilder.append(ctx.getChild(1).getText().toLowerCase());
                     this.codeBuilder.append("\n");
                     this.isExpresionAsignacion = false;
                 }
             }
         }
-        else if(this.isCondicion){
-            if(ctx.getChildCount() == 1){
-                this.codeBuilder.append(ctx.getChild(0).getText().toLowerCase());
-            }
-            else if(ctx.getChildCount() == 2){
-                if (ctx.getChild(0).getText().equals("-")) {
-                    this.codeBuilder.append(ctx.getChild(0).getText());
-                    this.codeBuilder.append(ctx.getChild(0).getText().toLowerCase());
-                }
-                else if(ctx.getChild(0).getText().equalsIgnoreCase("no")){
-                    this.codeBuilder.append("not ");
-                    this.codeBuilder.append(ctx.getChild(0).getText().toLowerCase());
-                }
-            }
-            else if(ctx.getChildCount() == 3){
-                if (ctx.getChild(1).getText().equals("=")) {
-                    this.codeBuilder.append(ctx.getChild(0).getText().toLowerCase());
-                    this.codeBuilder.append(" == ");
-                    this.codeBuilder.append(ctx.getChild(2).getText().toLowerCase());
-                } else if (ctx.getChild(1).getText().equals("<>")) {
-                    this.codeBuilder.append(ctx.getChild(0).getText().toLowerCase());
-                    this.codeBuilder.append(" != ");
-                    this.codeBuilder.append(ctx.getChild(2).getText().toLowerCase());
-                } else if (ctx.getChild(1).getText().equals("o")) {
-                    this.codeBuilder.append(ctx.getChild(0).getText().toLowerCase());
-                    this.codeBuilder.append(" or ");
-                    this.codeBuilder.append(ctx.getChild(2).getText().toLowerCase());
-                } else if (ctx.getChild(1).getText().equals("y")) {
-                    this.codeBuilder.append(ctx.getChild(0).getText().toLowerCase());
-                    this.codeBuilder.append(" and ");
-                    this.codeBuilder.append(ctx.getChild(2).getText().toLowerCase());
-                } else {
-                    this.codeBuilder.append(ctx.getChild(0).getText().toLowerCase());
-                    this.codeBuilder.append(ctx.getChild(1).getText());
-                    this.codeBuilder.append(ctx.getChild(2).getText().toLowerCase());
-                }
-            }
+        else if(this.isCondicion) {
         }
     }
     @Override public void exitExpresion(LPP_grammarParser.ExpresionContext ctx) { }
     @Override public void enterListaExpr(LPP_grammarParser.ListaExprContext ctx) {
-        //this.codeBuilder.append(ctx.getChild(0).getText());
         if(this.isPrint){
             if(ctx.getChildCount() == 1){
                 if (ctx.getChild(0).getText().contains("\"") || ctx.getChild(0).getText().contains("'")) {
@@ -399,7 +460,7 @@ public class Traductor extends LPP_grammarBaseListener{
             }
             else {
                 for (int i = 0; i < ctx.getChildCount()-2; i=i+2) {
-                    if (ctx.getChild(0).getText().contains("\"") || ctx.getChild(0).getText().contains("'")) {
+                    if (ctx.getChild(i).getText().contains("\"") || ctx.getChild(i).getText().contains("'")) {
                         this.codeBuilder.append(ctx.getChild(i).getText());
                         this.codeBuilder.append(", ");
                     }
@@ -431,6 +492,26 @@ public class Traductor extends LPP_grammarBaseListener{
             for(int i = 0; i < this.getIndentationLevel(); ++i) {
                 this.codeBuilder.append("\t");
             }
+        }
+    }
+    public void getString(String lista){
+        int con = 0;
+        this.codeBuilder.append("[");
+        for(char c : lista.toCharArray()){
+            if (con == lista.length()-1){
+                this.codeBuilder.append(c);
+                this.codeBuilder.append("]");
+            }
+            else{
+                this.codeBuilder.append(c);
+                this.codeBuilder.append(", ");
+                con++;
+            }
+        }
+    }
+    public void getExpresion(String p){
+        for(char c : p.toCharArray()){
+
         }
     }
     public String getCode() {
